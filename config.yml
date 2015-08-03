@@ -1,0 +1,642 @@
+﻿secrets: secrets.yml
+templates:
+  global:
+    no_entries_ok: yes
+    pathscrub: windows
+    free_space:
+      path: '{{secrets.folder.root}}'
+      space: 5000
+    log_filter:
+      task:
+        - marked seen
+        - because quality already downloaded
+      move:
+        - left because it exceeds safety value
+        - does not exists (anymore)
+      urlrewriter:
+        - URL rewritten to
+      enzyme.mkv:
+        - Reading
+        - Processing
+      enzyme.parsers.ebml.core:
+        - ignored
+        - Maximum level
+      subliminal.video:
+        - Scanning video
+      parser_internal:
+        - appears to be an episode pack
+      content_size:
+        - rejecting
+    domain_delay:
+      torrentz.eu: 5 seconds
+      nyaa.se: 5 seconds
+      kickass.to: 5 seconds
+
+  series:
+    thetvdb_lookup: yes
+    series:
+      - Scandal (2012):
+          alternate_name: Scandal US
+    configure_series:
+      from:
+#        thetvdb_favorites:
+#          account_id: '{{secrets.thetvdb.id}}'
+        text:
+          url: "file:///var/tmp/trakt_series.txt"
+          entry:
+            title: "(.*)"
+            url: "(.*)"
+      settings:
+        timeframe: 30 minutes
+        target: hdtv 720p !h265
+        quality: hdtv+ 720p !h265
+        propers: 16 hours
+        identified_by: ep
+    content_size:
+      min: 400
+    content_filter:
+      require:
+        - '*.mkv'
+      reject:
+        - '*.rar'
+
+  anime:
+    series:
+      horriblesubs:
+        - Naruto Shippuuden:
+            quality: 480p
+        - Kekkai Sensen:
+            begin: 1
+      other_groups:
+        - Dragon Ball Super:
+            from_group: AnimeRG
+            begin: 1
+      movies:
+        - Code Geass Boukoku no Akito:
+            alternate_name: Gekijouban Code Geass Boukoku no Akito
+            begin: 4
+      settings:
+        horriblesubs:
+          identified_by: sequence
+          quality: 720p !10bit !h265
+          from_group: horriblesubs
+        other_groups:
+          identified_by: sequence
+          quality: 720p !10bit !h265
+        movies:
+          identified_by: sequence
+          quality: 720p+ !10bit !h265
+
+  movies-1080p:
+    tmdb_lookup: yes
+    movie_queue: accept
+    quality: 1080p webdl+ !h265
+    content_size:
+      min: 1000
+      max: 6000
+    content_filter:
+      reject:
+        - '*.rar'
+
+  movies-720p:
+    tmdb_lookup: yes
+    movie_queue: accept
+    quality: 720p webdl+ !h265
+    content_size:
+      min: 500
+      max: 3000
+    content_filter:
+      reject:
+        - '*.rar'
+
+  pushbullet:
+    pushbullet:
+      apikey: '{{secrets.pushbullet.api}}'
+      title: "[Flexget] {{task}}"
+      body: "{{title}}"
+
+  regex:
+    regexp:
+      reject:
+        - (s|d)ub(s|bed|lado|titulado)?\b
+        - \bdual\b
+        - \b3d\b
+        - \b(fr)(ench)?\b
+        - \b(ita)(lian)?\b
+        - \b(spa)(nish)?\b
+        - \b(ger)(man)?\b
+        - \bcastellano\b
+
+  torrents:
+    torrent_alive:
+      min_seeds: 10
+      reject_for: 15 minutes
+    magnets: no
+    # verify_ssl_certificates: no
+
+  transmission-series:
+    transmission:
+      main_file_only: yes
+      include_subs: yes
+      skip_files:
+        - '*.nfo'
+        - '*.sfv'
+        - '*.txt'
+        - '*[sS]ample*'
+        - '*[tT]railer*'
+      content_filename: "{{tvdb_series_name|default(series_name)|pathscrub}} {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %}: - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %}: - {{quality}}{% endif %}"
+      rename_like_files: yes
+      path: "{{secrets.folder.downseries}}{{tvdb_series_name|default(series_name)|pathscrub}}/"
+
+  transmission-movies:
+    transmission:
+      main_file_only: yes
+      include_subs: yes
+      skip_files:
+        - '*.nfo'
+        - '*.sfv'
+        - '*.txt'
+        - '*[sS]ample*'
+        - '*[tT]railer*'
+      content_filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %}: - {{quality}}{% endif %}"
+      rename_like_files: yes
+      path: "{{secrets.folder.downmovies}}{{movie_name|pathscrub}}"
+
+  transmission-anime:
+    transmission:
+      main_file_only: yes
+      content_filename: "{{series_name}} - ep{{series_id}} - {{quality}}"
+      path: "{{secrets.folder.downanime}}{{series_name|pathscrub}}/"
+
+
+tasks:
+
+##### Populates the series database with the files on the library, to avoid duplicate downloads
+#
+  populate-series-db:
+    priority: 1
+    interval: 4 hour
+    seen: local
+    thetvdb_lookup: yes
+    find:
+      regexp: '.*(avi|mkv|mp4)$'
+      path: /mnt/armazem/Series/
+      recursive: yes
+    accept_all: yes
+    configure_series:
+      from:
+        listdir: '{{secrets.folder.series}}'
+      settings:
+        tracking: no
+
+
+##### Fetch, format and output trakt series list to temp file
+#
+  fetch-series:
+    priority: 3
+    disable: builtins
+    trakt_list:
+      username: '{{secrets.trakt.user}}'
+      list: '{{secrets.trakt.series}}'
+      type: shows
+    accept_all: yes
+    thetvdb_lookup: yes
+    set:
+      title: "{{tvdb_series_name|escape|replace('&#39;', '')}}"
+    exec:
+      on_start:
+        phase: rm -f /var/tmp/trakt_series.txt && touch /var/tmp/trakt_series.txt
+      on_output:
+        for_entries: echo "{{title}}" >> /var/tmp/trakt_series.txt
+
+
+##### Download episodes manually downloaded torrents
+#
+  download-series-manual:
+    priority: 4
+#    manual: yes
+    disable: [seen, seen_info_hash, retry_failed]
+    template:
+      - transmission-series
+      - pushbullet
+    find:
+      path: "{{secrets.folder.downseries}}"
+      mask: '*.torrent'
+    parsing:
+      series: guessit
+    metainfo_series: yes
+    thetvdb_lookup: yes
+    accept_all: yes
+    exec:
+      on_output:
+        for_accepted: rm -f "{{location}}"
+
+
+##### Download episodes from RSS feeds
+#
+  download-series-rss:
+    priority: 5
+    template:
+      - series
+      - regex
+      - torrents
+      - transmission-series
+      - pushbullet
+    inputs:
+      - rss:
+          url: http://torrentz.eu/feedA?good&q=tv
+          all_entries: yes
+      - rss:
+          url: https://kickass.to/tv/?rss=1
+          all_entries: yes
+
+
+##### Discover and download older episodes and pilots from recently added series, set with interval to avoid spam
+#
+  download-series-discover:
+    priority: 6
+    interval: 4 hour
+    template:
+      - series
+      - regex
+      - torrents
+      - transmission-series
+      - pushbullet
+    discover:
+      ignore_estimations: yes
+      interval: 15 minutes
+      what:
+        - emit_series:
+            from_start: yes
+      from:
+        - torrentz: good
+#        - kat:
+#            category: tv
+#            verified: yes
+
+
+##### Download anime from RSS feed
+#
+  download-anime-rss:
+    priority: 8
+    template:
+      - anime
+      - torrents
+      - transmission-anime
+      - pushbullet
+    inputs:
+      - rss:
+          url: http://www.nyaa.se/?page=rss&cats=1_37
+          all_entries: yes
+
+
+##### Discover and download anime, set with interval since it does not return results often
+#
+  download-anime-discover:
+    priority: 9
+    interval: 4 hour
+    template:
+      - anime
+      - torrents
+      - transmission-anime
+      - pushbullet
+    discover:
+      ignore_estimations: yes
+      interval: 15 minutes
+      what:
+        - emit_series:
+            from_start: yes
+      from:
+        - nyaa:
+            category: anime eng
+            filter: all
+
+
+##### Remove manually movies downloaded from the movie queue and trakt list
+#
+  clean-movie-queue:
+    priority: 11
+    disable: seen
+    interval: 2 hour
+    parsing:
+      movie: guessit
+    find:
+      regexp: .*(avi|mkv|mp4)$
+      path: '{{secrets.folder.movies}}'
+      recursive: yes
+    accept_all: yes
+    movie_queue: accept
+    trakt_remove:
+      username: '{{secrets.trakt.user}}'
+      password: '{{secrets.trakt.pass}}'
+      list: '{{secrets.trakt.movies}}'
+
+
+##### Fill the movie queue with movies from trakt list
+#
+  fill-movie-queue:
+    priority: 12
+    trakt_list:
+      username: '{{secrets.trakt.user}}'
+      list: '{{secrets.trakt.movies}}'
+      type: movies
+      strip_dates: yes
+    accept_all: yes
+    movie_queue: add
+
+
+##### Download movies manually downloaded torrents
+#
+  download-movies-manual:
+    priority: 15
+#    manual: yes
+    disable: [seen, seen_info_hash, retry_failed]
+    template:
+      - transmission-movies
+      - pushbullet
+    find:
+      path: "{{secrets.folder.downmovies}}"
+      mask: '*.torrent'
+    parsing:
+      movie: guessit
+    tmdb_lookup: yes
+    accept_all: yes
+    exec:
+      on_output:
+        for_accepted: rm -f "{{location}}"
+    trakt_remove:
+      username: '{{secrets.trakt.user}}'
+      password: '{{secrets.trakt.pass}}'
+      list: '{{secrets.trakt.movies}}'
+
+
+##### Download 1080p movies
+#
+  download-movies-1080p:
+    priority: 16
+    interval: 2 hour
+    template:
+      - movies-1080p
+      - regex
+      - torrents
+      - transmission-movies
+      - pushbullet
+    exists_movie:
+      - '{{secrets.folder.downmovies}}'
+      - '{{secrets.folder.movies}}'
+    discover:
+      ignore_estimations: yes
+      interval: 15 minutes
+      what:
+        - emit_movie_queue: yes
+      from:
+        - torrentz: good
+#        - kat:
+#            category: movies
+#            verified: yes
+    trakt_remove:
+      username: '{{secrets.trakt.user}}'
+      password: '{{secrets.trakt.pass}}'
+      list: '{{secrets.trakt.movies}}'
+
+
+ ##### Download 720p movies with 1 day delay from higher quality
+#
+  download-movies-720p:
+    priority: 17
+    interval: 4 hour
+    delay: 1 day
+    template:
+      - movies-720p
+      - regex
+      - torrents
+      - transmission-movies
+      - pushbullet
+    exists_movie:
+      - '{{secrets.folder.downmovies}}'
+      - '{{secrets.folder.movies}}'
+    discover:
+      ignore_estimations: yes
+      interval: 15 minutes
+      what:
+        - emit_movie_queue: yes
+      from:
+        - torrentz: good
+#        - kat:
+#            category: movies
+#            verified: yes
+    trakt_remove:
+      username: '{{secrets.trakt.user}}'
+      password: '{{secrets.trakt.pass}}'
+      list: '{{secrets.trakt.movies}}'
+
+
+##### Move series from downloads folder to respective folders, along with existing subtitles and adding the files to the subtitle queue
+#
+  move-series:
+    priority: 21
+    disable: [seen, retry_failed]
+# might be needed for some series, but causes issues with "name (year)" based series, like scandal
+#    parsing:
+#      series: guessit
+    metainfo_series: yes
+    thetvdb_lookup: yes
+    find:
+      path: '{{secrets.folder.downseries}}'
+      regexp: '.*\.(avi|mkv|mp4)$'
+      recursive: yes
+    accept_all: yes
+    regexp:
+      reject:
+        - \btrailer\b
+        - \bsample\b
+    move:
+      to: "/mnt/armazem/Series/{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}}/"
+      filename: "{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}} {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %}: - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %}: - {{quality}}{% endif %}"
+      along:
+        - srt
+        - sub
+        - en.srt
+        - en.sub
+      clean_source: 100
+    subtitle_queue:
+      action: add
+      path: "{{output}}"
+
+
+##### Move anime from downloads folder to respective folders. Needed intermediary to provide dynamic paths to rename-anime task
+#
+  move-anime:
+    priority: 23
+    disable: [seen, retry_failed]
+    metainfo_series: yes
+    parsing:
+      series: guessit
+    find:
+      path: '{{secrets.folder.downanime}}'
+      regexp: '.*\.(avi|mkv|mp4)$'
+      recursive: yes
+    accept_all: yes
+    move:
+      to: "/mnt/armazem/Anime/{{series_name|default(title)|pathscrub}}/"
+#      filename: "{{series_name}} - ep{{series_id}} - {{quality}}"#episode numbering issues, also, not needed
+      clean_source: 100
+    exec:
+      on_output:
+        for_accepted: echo "{{output}}" >> /var/tmp/anime_rename.txt
+      on_exit:
+        phase: /home/louleserver/FILES/anime_renamer.sh
+
+
+##### Rename downloaded anime. Some issues with differences between anime file/folder names might still exist
+### THIS HAS BEEN REPLACED BY anime_renamer.sh
+#
+  rename-anime:
+    priority: 24
+    manual: yes
+    disable: [seen, retry_failed]
+    delay: 1 day
+    regexp_parse:
+      source: /var/tmp/anime_rename.txt
+      sections:
+        - {regexp: '.*'}
+      keys:
+        title:
+          regexps:
+            - {regexp: '[^\/]+$'}
+        url:
+          regexps:
+            - {regexp: '.*'}
+        location:
+          regexps:
+            - {regexp: '.*'}
+    accept_all: yes
+    exec:
+      allow_background: yes
+      auto_escape: yes
+      on_output:
+        for_accepted:
+          - /usr/local/bin/kiara --kill
+          - /usr/local/bin/kiara -o --brief "{{location}}" &
+          - sed -i "/{{title|replace('[', '\[')|replace(']', '\]')}}/d" /var/tmp/anime_rename.txt
+
+
+##### Move movies from downloads folder to the movies folder, along with possible subtitles and adding the files to the subtitle queue
+#
+  move-movies:
+    priority: 26
+    disable: [seen, retry_failed]
+    template: pushbullet
+    parsing:
+      movie: guessit
+    tmdb_lookup: yes
+    find:
+      path: '{{secrets.folder.downmovies}}'
+      regexp: '.*\.(avi|mkv|mp4)$'
+      recursive: yes
+    accept_all: yes
+    regexp:
+      reject:
+        - \btrailer\b
+        - \bsample\b
+    move:
+      to: '{{secrets.folder.movies}}'
+      filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %}: - {{quality}}{% endif %}"
+      along:
+        - srt
+        - sub
+        - en.srt
+        - en.sub
+      clean_source: 100
+    subtitle_queue:
+      action: add
+      path: "{{output}}"
+
+
+##### Download subtitles for the previously queued files
+#
+  download-subtitles:
+    priority: 31
+    disable: [seen, retry_failed]
+    subtitle_queue: emit
+    accept_all: yes
+    subliminal:
+      exact_match: yes
+      languages:
+        - eng
+      providers:
+        - opensubtitles
+        - addic7ed
+        - podnapisi
+        - thesubdb
+        - tvsubtitles
+
+
+##### Clean finished torrents from transmission
+#
+  clean-transmission:
+    priority: 33
+    interval: 1 day
+    disable: details
+    clean_transmission:
+      transmission_seed_limits: yes
+
+
+##### Update trakt series list from local series folders, excluding the ones that already ended
+#
+  update-series-list:
+    priority: 41
+    interval: 1 day
+    disable: seen
+    seen: local
+    plugin_priority:
+      if: -251
+      manipulate: -252
+      trakt_add: -253
+      thetvdb_add: -254
+    metainfo_series: yes
+    find:
+      regexp: '.*\.(avi|mkv|mp4)$'
+      recursive: yes
+      path: '{{secrets.folder.series}}'
+    manipulate:
+      - series_season:
+          remove: yes
+      - series_episode:
+          remove: yes
+    accept_all: yes
+    thetvdb_lookup: yes
+    if:
+      - tvdb_status == 'Ended': reject
+    trakt_add:
+      username: '{{secrets.trakt.user}}'
+      password: '{{secrets.trakt.pass}}'
+      list: '{{secrets.trakt.series}}'
+    thetvdb_add:
+      account_id: '{{secrets.thetvdb.id}}'
+
+
+##### Clean the series that already ended from trakt series list and add them to the watched list for historical motives
+#
+  clean-series-list:
+    priority: 43
+    disable: seen
+    interval: 7 day
+    template: pushbullet
+    trakt_list:
+      username: '{{secrets.trakt.user}}'
+      list: '{{secrets.trakt.series}}'
+      type: shows
+    thetvdb_lookup: yes
+    if:
+      - tvdb_status == 'Ended': accept
+    trakt_remove:
+      username: '{{secrets.trakt.user}}'
+      password: '{{secrets.trakt.pass}}'
+      list: '{{secrets.trakt.series}}'
+    thetvdb_remove:
+      account_id: '{{secrets.thetvdb.id}}'
+    trakt_add:
+      username: '{{secrets.trakt.user}}'
+      password: '{{secrets.trakt.pass}}'
+      list: '{{secrets.trakt.watched}}'
