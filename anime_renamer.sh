@@ -1,4 +1,4 @@
-#!/bin/bash +x
+#!/bin/bash
 #
 # Uses kiara to rename and organize anime files:
 # https://github.com/hartfelt/kiara/
