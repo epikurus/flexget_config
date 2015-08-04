@@ -1,4 +1,4 @@
-# My [Flexget](https://github.com/Flexget/Flexget) config
+##My [Flexget](https://github.com/Flexget/Flexget) config
 
 This is not a comprehensive feature list, and many settings were tuned to personal preference
 
@@ -25,7 +25,7 @@ It also has Pushbullet notifications for most tasks (except the ones that may sp
 As sources for both tv shows and movies it uses torrentz and kat, and nyaa for anime.
 
 
-** Installation **
+**Installation**
 * Rename secrets.yml.sample to secrets.yml and change the fields inside according to your accounts and system
 * Change the paths in the move tasks to match your system
 * The files for the series list (and anime filenames) need to be manually created
