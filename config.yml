@@ -46,7 +46,7 @@ templates:
 #        thetvdb_favorites:
 #          account_id: '{{secrets.thetvdb.id}}'
         text:
-          url: "file:///var/tmp/trakt_series.txt"
+          url: "file://'{{secrets.list.series}}'"
           entry:
             title: "(.*)"
             url: "(.*)"
@@ -76,7 +76,7 @@ templates:
             begin: 1
       other_groups:
         - Dragon Ball Super:
-            from_group: DeadFish
+            from_group: DragonTeam
             begin: 1
       movies:
         - Code Geass Boukoku no Akito:
@@ -89,7 +89,7 @@ templates:
           from_group: horriblesubs
         other_groups:
           identified_by: sequence
-          quality: 720p !10bit !h265
+          quality: "!10bit !h265"
         movies:
           identified_by: sequence
           quality: 720p+ !10bit !h265
@@ -203,7 +203,7 @@ tasks:
     thetvdb_lookup: yes
     find:
       regexp: '.*(avi|mkv|mp4)$'
-      path: /mnt/armazem/Series/
+      path: '{{secrets.folder.series}}'
       recursive: yes
     accept_all: yes
     configure_series:
@@ -228,9 +228,9 @@ tasks:
       title: "{{tvdb_series_name|escape|replace('&#39;', '')}}"
     exec:
       on_start:
-        phase: rm -f /var/tmp/trakt_series.txt && touch /var/tmp/trakt_series.txt
+        phase: rm -f '{{secrets.list.series}}' && touch '{{secrets.list.series}}'
       on_output:
-        for_entries: echo "{{title}}" >> /var/tmp/trakt_series.txt
+        for_entries: echo "{{title}}" >> '{{secrets.list.series}}'
 
 
 ##### Download episodes from manually downloaded torrents
@@ -503,11 +503,12 @@ tasks:
     move:
       to: "/mnt/armazem/Anime/{{series_name|default(title)|pathscrub}}/"
       clean_source: 100
+### REMOVE THE LINES BELOW IF YOU DONT WANT TO RENAME ANIME WITH THE EXTERNAL SCRIPT
     exec:
       on_output:
-        for_accepted: echo "{{output}}" >> /var/tmp/anime_rename.txt
+        for_accepted: echo "{{output}}" >> '{{secrets.list.animerename}}'
       on_exit:
-        phase: /home/louleserver/FILES/anime_renamer.sh
+        phase: '{{secrets.script.animerenamer}}'
 
 
 ##### Move movies from downloads folder to the movies folder, along with possible subtitles and adding the files to the subtitle queue
