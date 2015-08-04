@@ -25,9 +25,12 @@ It also has Pushbullet notifications for most tasks (except the ones that may sp
 As sources for both tv shows and movies it uses torrentz and kat, and nyaa for anime.
 
 
-**Installation**
+Installation
+------------
 * Rename secrets.yml.sample to secrets.yml and change the fields inside according to your accounts and system
+* Create the trakt.tv lists accordingly
 * Change the paths in the move tasks to match your system
-* The files for the series list (and anime filenames) need to be manually created
 * Alternative names for series can be defined directly with the series plugin in the series template
+* If you plan on using the anime rename script, you will need to install and configure [kiara](https://github.com/hartfelt/kiara/). If not just remove the lines marked in the move-anime task
 * Remove/edit everything else that does not fit your setup and needs
+* Finally, add flexget to cron (i use 30m, but i guess 1/2h is also fine): `*/30 * * * * /usr/local/bin/flexget execute`
