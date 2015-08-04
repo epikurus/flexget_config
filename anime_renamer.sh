@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Uses kiara to rename and organize anime files:
+# Uses kiara to rename anime files according to anidb.net:
 # https://github.com/hartfelt/kiara/
 #
 #Basic Settings
@@ -58,6 +58,6 @@ for line in ${!array[*]}; do
 done
 
 #Kill kiara backend, since it does nothing after renaming
-/usr/local/bin/kiara --kill
+$EXEC --kill
 
 exit 0
