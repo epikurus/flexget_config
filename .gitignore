@@ -4,3 +4,4 @@ flexget.log*
 db-config.sqlite
 plugins/log_filter.pyc
 received/
+temp/
