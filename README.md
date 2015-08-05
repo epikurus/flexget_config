@@ -1,8 +1,8 @@
 ##My [Flexget](https://github.com/Flexget/Flexget) config
 
-This is not a comprehensive feature list, and many settings were tuned to personal preference
+This is not a comprehensive feature list, and many settings were tuned to personal preference. It is also under constant development.
 
-It currently does the following (ideally by that order):
+It currently does the following (ideally by this order):
 * Populates the series database with a set interval (maily to allow fresh starts of the series db)
 * Gets series from a custom trakt list and writes them to a file, and then looks up for their tvdb name, to have series names ready for kodi (since trakt v2 all series have the year in the name)
 * Looks on the series download folder for .torrent files and adds them to transmission
@@ -20,10 +20,11 @@ It currently does the following (ideally by that order):
 * Updates the trakt series list from the series in the library, meaning that manually downloaded series will be part of flexget's series search, with the exception of when the tv show has already ended (with an interval of 1 day, because it should not happen often)
 * Finally, it will look if all the series currently in the trakt series list are still running, or have been canceled/ended, and if so, remove them from that list (with a big interval to avoid false positives)
 
-It also has Pushbullet notifications for most tasks (except the ones that may spam, like move_series) and the log_filter plugin to filter some messages that are unnecessary.
-
 As sources for both tv shows and movies it uses torrentz and kat, and nyaa for anime.
 
+It also has Pushbullet notifications for most tasks (except the ones that may spam, like move_series) and the log_filter plugin (by [tarzasai](https://github.com/tarzasai/.flexget)) to filter some log messages that are unnecessary.
+
+This was built based on multiple configurations and snippets over the time, with the help of [flexget's community](http://discuss.flexget.com/).
 
 Installation
 ------------
@@ -31,6 +32,8 @@ Installation
 * Create the trakt.tv lists accordingly
 * Change the paths in the move tasks to match your system
 * Alternative names for series can be defined directly with the series plugin in the series template
-* If you plan on using the anime rename script, you will need to install and configure [kiara](https://github.com/hartfelt/kiara/). If not just remove the lines marked in the move-anime task
+* If you plan on using the anime rename script, you will need to install and configure [kiara](https://github.com/hartfelt/kiara/) and create the anime rename list file. If not just remove the lines marked in the move-anime task
 * Remove/edit everything else that does not fit your setup and needs
 * Finally, add flexget to cron (i use 30m, but i guess 1/2h is also fine): `*/30 * * * * /usr/local/bin/flexget execute`
+
+This config was designed and tested for linux. It will NOT work on windows out of the box.
