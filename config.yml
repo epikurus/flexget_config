@@ -46,7 +46,7 @@ templates:
 #        thetvdb_favorites:
 #          account_id: '{{secrets.thetvdb.id}}'
         text:
-          url: "file://'{{secrets.list.series}}'"
+          url: 'file://{{secrets.list.series}}'
           entry:
             title: "(.*)"
             url: "(.*)"
@@ -202,7 +202,7 @@ tasks:
     seen: local
     thetvdb_lookup: yes
     find:
-      regexp: '.*(avi|mkv|mp4)$'
+      regexp: '.*\.(avi|mkv|mp4)$'
       path: '{{secrets.folder.series}}'
       recursive: yes
     accept_all: yes
@@ -243,7 +243,7 @@ tasks:
       - transmission-series
       - pushbullet
     find:
-      path: "{{secrets.folder.downseries}}"
+      path: '{{secrets.folder.downseries}}'
       mask: '*.torrent'
     parsing:
       series: guessit
@@ -329,6 +329,7 @@ tasks:
       what:
         - emit_series:
             from_start: yes
+            backfill: yes
       from:
         - nyaa:
             category: anime eng
@@ -344,7 +345,7 @@ tasks:
     parsing:
       movie: guessit
     find:
-      regexp: .*(avi|mkv|mp4)$
+      regexp: '.*\.(avi|mkv|mp4)$'
       path: '{{secrets.folder.movies}}'
       recursive: yes
     accept_all: yes
@@ -378,7 +379,7 @@ tasks:
       - transmission-movies
       - pushbullet
     find:
-      path: "{{secrets.folder.downmovies}}"
+      path: '{{secrets.folder.downmovies}}'
       mask: '*.torrent'
     parsing:
       movie: guessit
