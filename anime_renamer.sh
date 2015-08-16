@@ -30,8 +30,8 @@ fi
 for line in ${!array[*]}; do
   #Move array line to tmp var to make code easier to read
   TMP="${array[$line]}"
-  #Escape \, / and & because of sed
-  TMP_SAFE=$(echo $TMP | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
+  #Escape \, /, & and [] because of sed
+  TMP_SAFE=$(echo $TMP | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g' -e 's/\[/\\[/g' -e 's/\]/\\]/g')
 
   #Check if file exists or not, to avoid errors from the program and get more accurate condition checks later on
   if [[ -e "$TMP" ]]; then
