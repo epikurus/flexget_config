@@ -28,10 +28,6 @@ templates:
         - appears to be an episode pack
       content_size:
         - rejecting
-    domain_delay:
-      torrentz.eu: 5 seconds
-      nyaa.se: 5 seconds
-      kickass.to: 5 seconds
 
 ##### Series config
 #
@@ -150,6 +146,10 @@ templates:
       reject_for: 15 minutes
     magnets: no
     verify_ssl_certificates: no
+    domain_delay:
+      torrentz.eu: 1 seconds
+      kickass.to: 1 seconds
+      nyaa.se: 1 seconds
 
 ##### Transmission series config
 #
