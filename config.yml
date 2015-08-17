@@ -11,6 +11,8 @@ templates:
       task:
         - marked seen
         - because quality already downloaded
+        - because episode has already been downloaded
+        - you should add (at least) one!
       move:
         - left because it exceeds safety value
         - does not exists (anymore)
@@ -28,6 +30,10 @@ templates:
         - appears to be an episode pack
       content_size:
         - rejecting
+      kat:
+        - Not Found
+      thetvdb_add:
+        - skipping...
 
 ##### Series config
 #
