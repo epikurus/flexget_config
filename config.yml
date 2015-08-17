@@ -47,13 +47,13 @@ templates:
             title: "(.*)"
             url: "(.*)"
       settings:
-        timeframe: 30 minutes
+        timeframe: 15 minutes
         target: hdtv 720p !h265
         quality: hdtv+ 720p !h265
         propers: 16 hours
         identified_by: ep
     content_size:
-      min: 400
+      min: 350
     content_filter:
       require:
         - '*.mkv'
@@ -200,11 +200,11 @@ tasks:
     priority: 1
     interval: 4 hour
     seen: local
-    thetvdb_lookup: yes
     find:
       regexp: '.*\.(avi|mkv|mp4)$'
       path: '{{secrets.folder.series}}'
       recursive: yes
+    thetvdb_lookup: yes
     accept_all: yes
     configure_series:
       from:
@@ -222,8 +222,8 @@ tasks:
       username: '{{secrets.trakt.user}}'
       list: '{{secrets.trakt.series}}'
       type: shows
-    accept_all: yes
     thetvdb_lookup: yes
+    accept_all: yes
     set:
       title: "{{tvdb_series_name|escape|replace('&#39;', '')}}"
     exec:
@@ -342,12 +342,13 @@ tasks:
     priority: 11
     disable: seen
     interval: 2 hour
-    parsing:
-      movie: guessit
     find:
       regexp: '.*\.(avi|mkv|mp4)$'
       path: '{{secrets.folder.movies}}'
       recursive: yes
+    parsing:
+      movie: guessit
+    tmdb_lookup: yes
     accept_all: yes
     movie_queue: accept
     trakt_remove:
@@ -460,15 +461,15 @@ tasks:
   move-series:
     priority: 21
     disable: [seen, retry_failed]
+    find:
+      path: '{{secrets.folder.downseries}}'
+      regexp: '.*\.(avi|mkv|mp4)$'
+      recursive: yes
 # might be needed for some series, but causes issues with "name (year)" based series, like scandal
 #    parsing:
 #      series: guessit
     metainfo_series: yes
     thetvdb_lookup: yes
-    find:
-      path: '{{secrets.folder.downseries}}'
-      regexp: '.*\.(avi|mkv|mp4)$'
-      recursive: yes
     accept_all: yes
     regexp:
       reject:
@@ -493,13 +494,13 @@ tasks:
   move-anime:
     priority: 23
     disable: [seen, retry_failed]
-    metainfo_series: yes
-    parsing:
-      series: guessit
     find:
       path: '{{secrets.folder.downanime}}'
       regexp: '.*\.(avi|mkv|mp4)$'
       recursive: yes
+    parsing:
+      series: guessit
+    metainfo_series: yes
     accept_all: yes
     move:
       to: "/mnt/armazem/Anime/{{series_name|default(title)|pathscrub}}/"
@@ -518,13 +519,13 @@ tasks:
     priority: 26
     disable: [seen, retry_failed]
     template: pushbullet
-    parsing:
-      movie: guessit
-    tmdb_lookup: yes
     find:
       path: '{{secrets.folder.downmovies}}'
       regexp: '.*\.(avi|mkv|mp4)$'
       recursive: yes
+    parsing:
+      movie: guessit
+    tmdb_lookup: yes
     accept_all: yes
     regexp:
       reject:
@@ -590,13 +591,13 @@ tasks:
       regexp: '.*\.(avi|mkv|mp4)$'
       recursive: yes
       path: '{{secrets.folder.series}}'
+    thetvdb_lookup: yes
     manipulate:
       - series_season:
           remove: yes
       - series_episode:
           remove: yes
     accept_all: yes
-    thetvdb_lookup: yes
     if:
       - tvdb_status == 'Ended': reject
     trakt_add:
