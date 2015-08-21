@@ -1,6 +1,6 @@
 secrets.yml
 config.yml.*
-flexget.log*
+*.log*
 db-config.sqlite
 plugins/log_filter.pyc
 received/
