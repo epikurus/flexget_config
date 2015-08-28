@@ -169,7 +169,7 @@ templates:
         - '*.txt'
         - '*[sS]ample*'
         - '*[tT]railer*'
-      content_filename: "{{tvdb_series_name|default(series_name)|pathscrub}} {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %}: - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %}: - {{quality}}{% endif %}"
+      content_filename: "{{tvdb_series_name|default(series_name)|pathscrub}} {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %}: - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %}: - [{{quality}}]{% endif %}"
       rename_like_files: yes
       path: "{{secrets.folder.downseries}}{{tvdb_series_name|default(series_name)|pathscrub}}/"
 
@@ -185,7 +185,7 @@ templates:
         - '*.txt'
         - '*[sS]ample*'
         - '*[tT]railer*'
-      content_filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %}: - {{quality}}{% endif %}"
+      content_filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %}: - [{{quality}}]{% endif %}"
       rename_like_files: yes
       path: "{{secrets.folder.downmovies}}{{movie_name|pathscrub}}"
 
@@ -194,7 +194,7 @@ templates:
   transmission-anime:
     transmission:
       main_file_only: yes
-      content_filename: "{{series_name}} - ep{{series_id}} - {{quality}}"
+      content_filename: "{{series_name}} - ep{{series_id}} - [{{quality}}]"
       path: "{{secrets.folder.downanime}}{{series_name|pathscrub}}/"
 
 
@@ -483,7 +483,7 @@ tasks:
         - \bsample\b
     move:
       to: "/mnt/armazem/Series/{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}}/"
-      filename: "{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}} {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %}: - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %}: - {{quality}}{% endif %}"
+      filename: "{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}} {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %}: - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %}: - [{{quality}}]{% endif %}"
       along:
         - srt
         - sub
@@ -539,7 +539,7 @@ tasks:
         - \bsample\b
     move:
       to: '{{secrets.folder.movies}}'
-      filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %}: - {{quality}}{% endif %}"
+      filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %}: - [{{quality}}]{% endif %}"
       along:
         - srt
         - sub
