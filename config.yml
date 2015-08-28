@@ -12,7 +12,7 @@ templates:
         - marked seen
         - because quality already downloaded
         - because episode has already been downloaded
-        - you should add (at least) one!
+        - Task does not have any
       move:
         - left because it exceeds safety value
         - does not exists (anymore)
