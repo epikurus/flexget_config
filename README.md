@@ -36,4 +36,4 @@ Installation
 * Remove/edit everything else that does not fit your setup and needs
 * Finally, add flexget to cron (i use 30m, but i guess 1/2h is also fine): `*/30 * * * * /usr/local/bin/flexget execute`
 
-This config was designed and tested for linux. It will NOT work on windows out of the box.
+This config was designed and tested for Linux and Transmission. It will NOT work on Windows out of the box.
