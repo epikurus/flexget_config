@@ -12,6 +12,7 @@ animeListFile="/var/tmp/anime_rename.txt"
 
 #Define the internal field separator to CR and LF so that the animeList elements are full lines
 IFS=$'\r\n'
+#Create an array with the contents of the file
 animeList=( $(cat $animeListFile) )
 #Restore the IFS to bash default (space)
 IFS=$' '
