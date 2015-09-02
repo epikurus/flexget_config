@@ -226,6 +226,7 @@ tasks:
     disable: builtins
     trakt_list:
       username: '{{secrets.trakt.user}}'
+      password: '{{secrets.trakt.pass}}'
       list: '{{secrets.trakt.series}}'
       type: shows
     thetvdb_lookup: yes
@@ -369,6 +370,7 @@ tasks:
     priority: 12
     trakt_list:
       username: '{{secrets.trakt.user}}'
+      password: '{{secrets.trakt.pass}}'
       list: '{{secrets.trakt.movies}}'
       type: movies
       strip_dates: yes
@@ -623,6 +625,7 @@ tasks:
     template: pushbullet
     trakt_list:
       username: '{{secrets.trakt.user}}'
+      password: '{{secrets.trakt.pass}}'
       list: '{{secrets.trakt.series}}'
       type: shows
     thetvdb_lookup: yes
