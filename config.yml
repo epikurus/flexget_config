@@ -621,7 +621,8 @@ tasks:
   clean-series-list:
     priority: 43
     disable: seen
-    interval: 7 day
+    interval: 1 day
+    delay: 8 day
     template: pushbullet
     trakt_list:
       username: '{{secrets.trakt.user}}'
