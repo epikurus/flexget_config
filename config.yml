@@ -55,11 +55,11 @@ templates:
             title: "(.*)"
             url: "(.*)"
       settings:
+        identified_by: ep
         timeframe: 15 minutes
         target: hdtv 720p !h265
         quality: hdtv+ 720p !h265
         propers: 16 hours
-        identified_by: ep
     content_size:
       min: 350
     content_filter:
@@ -73,12 +73,13 @@ templates:
 #
   anime:
     series:
-      horriblesubs:
+      episodes:
         - Naruto Shippuuden:
+            from_group: horriblesubs
             quality: 480p
         - Kekkai Sensen:
+            from_group: horriblesubs
             begin: 1
-      other_groups:
         - Dragon Ball Super:
             from_group: DragonTeam
             begin: 1
@@ -87,11 +88,7 @@ templates:
             alternate_name: Gekijouban Code Geass Boukoku no Akito
             begin: 4
       settings:
-        horriblesubs:
-          identified_by: sequence
-          quality: 720p !10bit !h265
-          from_group: horriblesubs
-        other_groups:
+        episodes:
           identified_by: sequence
           quality: 720p !10bit !h265
         movies:
