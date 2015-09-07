@@ -91,6 +91,8 @@ templates:
         episodes:
           identified_by: sequence
           quality: 720p !10bit !h265
+          special_ids:
+            - OVA
         movies:
           identified_by: sequence
           quality: 720p+ !10bit !h265
