@@ -34,6 +34,8 @@ templates:
         - Not Found
       thetvdb_add:
         - skipping...
+      assume_quality:
+        - ""
 
 ##### Series config
 #
@@ -91,10 +93,11 @@ templates:
           from_group: horriblesubs
         other_groups:
           identified_by: sequence
-          quality: "!10bit !h265"
+          quality: 720p !10bit !h265
         movies:
           identified_by: sequence
           quality: 720p+ !10bit !h265
+    assume_quality: 720p
 
 ##### Movies config
 #
