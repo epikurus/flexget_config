@@ -60,6 +60,7 @@ templates:
         target: hdtv 720p !h265
         quality: hdtv+ 720p !h265
         propers: 16 hours
+        specials: no
     content_size:
       min: 350
     content_filter:
