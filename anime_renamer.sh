@@ -40,16 +40,23 @@ for line in ${!animeList[*]}; do
     #Call the program to rename the file
     $bin $args "$animePath"
 
+    #Get the name and path after renaming
+    newName=$(ls "$animeDir" | grep $animeId)
+    newPath=$animeDir$newName
+    newPath_safe=$(echo $newPath | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g' -e 's/\[/\\[/g' -e 's/\]/\\]/g')
+
     #Do things if it was renamed and if not
-    if [[ $(ls "$animeDir" | grep $animeId | grep -E "[e,E]pisode|[u,U]nknown") ]]; then
+    if [[ $(echo $newName | grep -E "[e,E]pisode|[u,U]nknown") ]]; then
       #Episode name contains the word episode or unknown, so it was not renamed properly
       echo "$(date '+%H:%M:%S') - File was not renamed properly! Episode probably does not have a name yet on aniDB."
+      #Replace the old path with the new
+      sed -i "s/$animePath_safe/$newPath_safe/g" "$animeListFile"
     elif [[ -e "$animePath" ]]; then
       #Original file still exists, so it was not renamed
       echo "$(date '+%H:%M:%S') - File still exists with the same name. File probably does not exist in aniDB yet."
     else
       #File does not exist anymore, and does not match the first case, so it must have been renamed
-      echo "$(date '+%H:%M:%S') - File renamed successfully to: $(ls "$animeDir" | grep $animeId)"
+      echo "$(date '+%H:%M:%S') - File renamed successfully to: $newName"
       #Remove the file that was renamed from the anime list file
       sed -i "/$animePath_safe/d" "$animeListFile"
     fi
