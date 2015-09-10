@@ -43,10 +43,10 @@ for line in ${!animeList[*]}; do
     #Do things if it was renamed and if not
     if [[ $(ls "$animeDir" | grep $animeId | grep -E "[e,E]pisode|[u,U]nknown") ]]; then
       #Episode name contains the word episode or unknown, so it was not renamed properly
-      echo "$(date '+%H:%M:%S') - File was not renamed properly! File probably does not exist in aniDB yet."
+      echo "$(date '+%H:%M:%S') - File was not renamed properly! Episode probably does not have a name yet on aniDB."
     elif [[ -e "$animePath" ]]; then
       #Original file still exists, so it was not renamed
-      echo "$(date '+%H:%M:%S') - File still exists with the same name. Possible Kiara or file permissions error."
+      echo "$(date '+%H:%M:%S') - File still exists with the same name. File probably does not exist in aniDB yet."
     else
       #File does not exist anymore, and does not match the first case, so it must have been renamed
       echo "$(date '+%H:%M:%S') - File renamed successfully to: $(ls "$animeDir" | grep $animeId)"
