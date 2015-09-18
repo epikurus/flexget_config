@@ -41,9 +41,7 @@ templates:
 #
   series:
     thetvdb_lookup: yes
-    series:
-      - Scandal (2012):
-          alternate_name: Scandal US
+    include: series.yml
     configure_series:
       from:
 # Alternative for when trakt fails
