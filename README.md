@@ -31,8 +31,8 @@ Installation
 * Rename secrets.yml.sample to secrets.yml and change the fields inside according to your accounts and system
 * Create the trakt.tv lists accordingly
 * Change the paths in the move tasks to match your system
-* Alternative names for series can be defined directly with the series plugin in the series.yml file
-* Anime names configuration is done in the anime.yml file and should follow the structure provided in the example
+* Alternative names for series can be defined directly with the series plugin in the series.yml file, as shown in the sample file
+* Anime names configuration is done in the anime.yml file and should follow the structure provided in the sample file
 * If you plan on using the anime rename script, you will need to install and configure [kiara](https://github.com/hartfelt/kiara/) and create the anime rename list file. If not just remove the lines marked in the move-anime task
 * Remove/edit everything else that does not fit your setup and needs
 * Finally, add flexget to cron (i use 30m, but i guess 1/2h is also fine): `*/30 * * * * /usr/local/bin/flexget execute`
