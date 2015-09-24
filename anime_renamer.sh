@@ -32,7 +32,7 @@ for line in ${!animeList[*]}; do
   #Split the path in multiple vars for later use
   animeDir=$(echo $animePath | grep -Eo '/.*/')
   animeName=$(echo $animePath | grep -Po '[^/]*(?=- ep.*)')
-  animeId=$(echo $animePath | grep -Po '(?<=ep)[0-9]{1,3}')
+  animeId=$(echo $animePath | grep -Po '[_\-\s](ep)?[0-9]{1,3}' | grep -Eo '[0-9]{1,3}')
 
   #Check if file exists or not, to avoid errors from the program and get more accurate condition checks later on
   if [[ -e "$animePath" ]]; then
