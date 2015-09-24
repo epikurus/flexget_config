@@ -5,3 +5,5 @@ db-config.sqlite
 plugins/log_filter.pyc
 received/
 temp/
+series.yml
+anime.yml
