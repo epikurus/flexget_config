@@ -2,7 +2,8 @@ secrets.yml
 config.yml.*
 *.log*
 db-config.sqlite
-plugins/log_filter.pyc
+.config-lock
+plugins/*.pyc
 received/
 temp/
 series.yml
