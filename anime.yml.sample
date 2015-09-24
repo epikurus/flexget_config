@@ -1,11 +1,5 @@
 series:
   episodes:
-    - Naruto Shippuuden:
-        from_group: horriblesubs
-        quality: 480p
-    - Kekkai Sensen:
-        from_group: horriblesubs
-        begin: 1
     - Dragon Ball Super:
         from_group: DragonTeam
         begin: 1
