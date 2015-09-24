@@ -22,7 +22,7 @@ It currently does the following (ideally by this order):
 
 As sources for both tv shows and movies it uses torrentz and kat, and nyaa for anime.
 
-It also has Pushbullet notifications for most tasks (except the ones that may spam, like move_series) and the log_filter plugin (by [tarzasai](https://github.com/tarzasai/.flexget)) to filter some log messages that are unnecessary.
+It also has Pushbullet notifications for all downloads and ended/canceled series, and the log_filter plugin (by [tarzasai](https://github.com/tarzasai/.flexget)) to filter some log messages that are unnecessary.
 
 This was built based on multiple configurations and snippets over the time, with the help of [flexget's community](http://discuss.flexget.com/).
 

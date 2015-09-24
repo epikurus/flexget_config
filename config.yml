@@ -514,7 +514,6 @@ tasks:
   move-movies:
     priority: 26
     disable: [seen, retry_failed]
-    template: pushbullet
     find:
       path: '{{secrets.folder.downmovies}}'
       regexp: '.*\.(avi|mkv|mp4)$'
