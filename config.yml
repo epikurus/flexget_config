@@ -56,7 +56,7 @@ templates:
         identified_by: ep
         timeframe: 15 minutes
         target: hdtv 720p !h265
-        quality: hdtv+ 720p !h265
+        quality: webrip+ 720p !h265
         propers: 16 hours
         specials: no
     content_size:
