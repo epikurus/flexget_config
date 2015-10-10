@@ -30,8 +30,8 @@ templates:
         - appears to be an episode pack
       content_size:
         - rejecting
-      kat:
-        - Not Found
+      search_rss:
+        - Error
       thetvdb_add:
         - skipping...
       assume_quality:
@@ -144,7 +144,7 @@ templates:
     #verify_ssl_certificates: no
     domain_delay:
       torrentz.eu: 1 seconds
-      kickass.to: 1 seconds
+      unblocked.la: 1 seconds
       nyaa.se: 1 seconds
 
 ##### Transmission series config
@@ -267,7 +267,7 @@ tasks:
           url: http://torrentz.eu/feedA?good&q=tv
           all_entries: yes
       - rss:
-          url: https://kickass.to/tv/?rss=1
+          url: https://kickass.unblocked.la/tv/?rss=1
           all_entries: yes
 
 
@@ -290,9 +290,7 @@ tasks:
             from_start: yes
       from:
         - torrentz: good
-        - kat:
-            category: tv
-            verified: yes
+        - search_rss: https://kickass.unblocked.la/usearch/{{search_term}}/?rss=1
 
 
 ##### Download anime from RSS feed
@@ -414,9 +412,7 @@ tasks:
         - emit_movie_queue: yes
       from:
         - torrentz: good
-        - kat:
-            category: movies
-            verified: yes
+        - search_rss: https://kickass.unblocked.la/usearch/{{search_term}}/?rss=1
     trakt_remove:
       username: '{{secrets.trakt.user}}'
       password: '{{secrets.trakt.pass}}'
@@ -445,9 +441,7 @@ tasks:
         - emit_movie_queue: yes
       from:
         - torrentz: good
-        - kat:
-            category: movies
-            verified: yes
+        - search_rss: https://kickass.unblocked.la/usearch/{{search_term}}/?rss=1
     trakt_remove:
       username: '{{secrets.trakt.user}}'
       password: '{{secrets.trakt.pass}}'
