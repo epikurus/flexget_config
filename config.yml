@@ -139,7 +139,9 @@ templates:
       min_seeds: 10
       reject_for: 15 minutes
     magnets: no
-    verify_ssl_certificates: no
+    # Might need to disable if you are getting errors connecting to https sources
+    # Can remove if you upgrade to python 2.7.9+ or install requests[security]
+    #verify_ssl_certificates: no
     domain_delay:
       torrentz.eu: 1 seconds
       kickass.to: 1 seconds
