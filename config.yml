@@ -196,15 +196,18 @@ tasks:
     priority: 1
     interval: 4 hour
     seen: local
-    find:
-      regexp: '.*\.(avi|mkv|mp4)$'
+    filesystem:
       path: '{{secrets.folder.series}}'
       recursive: yes
+      retrieve: files
+      regexp: '.*\.(avi|mkv|mp4)$'
     thetvdb_lookup: yes
     accept_all: yes
     configure_series:
       from:
-        listdir: '{{secrets.folder.series}}'
+        filesystem:
+          path: '{{secrets.folder.series}}'
+          retrieve: dirs
       settings:
         tracking: no
 
@@ -239,7 +242,7 @@ tasks:
     template:
       - transmission-series
       - pushbullet
-    find:
+    filesystem:
       path: '{{secrets.folder.downseries}}'
       mask: '*.torrent'
     parsing:
@@ -337,10 +340,11 @@ tasks:
     priority: 11
     disable: seen
     interval: 2 hour
-    find:
-      regexp: '.*\.(avi|mkv|mp4)$'
+    filesystem:
       path: '{{secrets.folder.movies}}'
       recursive: yes
+      retrieve: files
+      regexp: '.*\.(avi|mkv|mp4)$'
     parsing:
       movie: guessit
     tmdb_lookup: yes
@@ -375,7 +379,7 @@ tasks:
     template:
       - transmission-movies
       - pushbullet
-    find:
+    filesystem:
       path: '{{secrets.folder.downmovies}}'
       mask: '*.torrent'
     parsing:
@@ -453,10 +457,11 @@ tasks:
   move-series:
     priority: 21
     disable: [seen, retry_failed]
-    find:
+    filesystem:
       path: '{{secrets.folder.downseries}}'
-      regexp: '.*\.(avi|mkv|mp4)$'
       recursive: yes
+      retrieve: files
+      regexp: '.*\.(avi|mkv|mp4)$'
 # might be needed for some series, but causes issues with "name (year)" based series, like scandal
 #    parsing:
 #      series: guessit
@@ -486,10 +491,11 @@ tasks:
   move-anime:
     priority: 23
     disable: [seen, retry_failed]
-    find:
+    filesystem:
       path: '{{secrets.folder.downanime}}'
-      regexp: '.*\.(avi|mkv|mp4)$'
       recursive: yes
+      retrieve: files
+      regexp: '.*\.(avi|mkv|mp4)$'
     parsing:
       series: guessit
     metainfo_series: yes
@@ -510,10 +516,11 @@ tasks:
   move-movies:
     priority: 26
     disable: [seen, retry_failed]
-    find:
+    filesystem:
       path: '{{secrets.folder.downmovies}}'
-      regexp: '.*\.(avi|mkv|mp4)$'
       recursive: yes
+      retrieve: files
+      regexp: '.*\.(avi|mkv|mp4)$'
     parsing:
       movie: guessit
     tmdb_lookup: yes
@@ -578,10 +585,11 @@ tasks:
       trakt_add: -253
       thetvdb_add: -254
     metainfo_series: yes
-    find:
-      regexp: '.*\.(avi|mkv|mp4)$'
-      recursive: yes
+    filesystem:
       path: '{{secrets.folder.series}}'
+      recursive: yes
+      retrieve: files
+      regexp: '.*\.(avi|mkv|mp4)$'
     thetvdb_lookup: yes
     manipulate:
       - series_season:
