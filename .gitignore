@@ -1,8 +1,7 @@
 secrets.yml
 config.yml.*
-*.log*
+*log*
 db-config.sqlite
-log-config.json
 .config-lock
 plugins/*.pyc
 received/
