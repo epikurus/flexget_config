@@ -30,7 +30,7 @@ This was built based on multiple configurations and snippets over the time, with
 Depends:
 --------
 
-* flexget >= 1.2.369
+* flexget >= 1.2.385
 * transmission-daemon
 * transmissionrpc >= 0.11
 * Linux
@@ -41,6 +41,7 @@ Installation
 
 * Clone this repository's contents into ~/.flexget
 * Rename secrets.yml.sample to secrets.yml and change the fields inside according to your accounts and system
+* Authenticate flexget with trakt: http://flexget.com/wiki/Plugins/trakt
 * Create the trakt.tv lists accordingly
 * Change the paths in the move tasks to match your system
 * Alternative names for series can be defined directly with the series plugin in the series.yml file, as shown in the sample file

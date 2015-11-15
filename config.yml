@@ -219,8 +219,7 @@ tasks:
     priority: 3
     disable: builtins
     trakt_list:
-      username: '{{secrets.trakt.user}}'
-      password: '{{secrets.trakt.pass}}'
+      account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.series}}'
       type: shows
     thetvdb_lookup: yes
@@ -352,8 +351,7 @@ tasks:
     accept_all: yes
     movie_queue: accept
     trakt_remove:
-      username: '{{secrets.trakt.user}}'
-      password: '{{secrets.trakt.pass}}'
+      account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.movies}}'
 
 
@@ -362,8 +360,7 @@ tasks:
   fill-movie-queue:
     priority: 12
     trakt_list:
-      username: '{{secrets.trakt.user}}'
-      password: '{{secrets.trakt.pass}}'
+      account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.movies}}'
       type: movies
       strip_dates: yes
@@ -391,8 +388,7 @@ tasks:
       on_output:
         for_accepted: rm -f "{{location}}"
     trakt_remove:
-      username: '{{secrets.trakt.user}}'
-      password: '{{secrets.trakt.pass}}'
+      account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.movies}}'
 
 
@@ -419,8 +415,7 @@ tasks:
         - torrentz: good
         - search_rss: https://kickass.unblocked.la/usearch/{{search_term}}/?rss=1
     trakt_remove:
-      username: '{{secrets.trakt.user}}'
-      password: '{{secrets.trakt.pass}}'
+      account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.movies}}'
 
 
@@ -448,8 +443,7 @@ tasks:
         - torrentz: good
         - search_rss: https://kickass.unblocked.la/usearch/{{search_term}}/?rss=1
     trakt_remove:
-      username: '{{secrets.trakt.user}}'
-      password: '{{secrets.trakt.pass}}'
+      account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.movies}}'
 
 
@@ -601,8 +595,7 @@ tasks:
     if:
       - tvdb_status == 'Ended': reject
     trakt_add:
-      username: '{{secrets.trakt.user}}'
-      password: '{{secrets.trakt.pass}}'
+      account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.series}}'
     thetvdb_add:
       account_id: '{{secrets.thetvdb.id}}'
@@ -617,20 +610,17 @@ tasks:
     delay: 8 day
     template: pushbullet
     trakt_list:
-      username: '{{secrets.trakt.user}}'
-      password: '{{secrets.trakt.pass}}'
+      account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.series}}'
       type: shows
     thetvdb_lookup: yes
     if:
       - tvdb_status == 'Ended': accept
     trakt_remove:
-      username: '{{secrets.trakt.user}}'
-      password: '{{secrets.trakt.pass}}'
+      account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.series}}'
     thetvdb_remove:
       account_id: '{{secrets.thetvdb.id}}'
     trakt_add:
-      username: '{{secrets.trakt.user}}'
-      password: '{{secrets.trakt.pass}}'
+      account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.collected}}'
