@@ -601,7 +601,7 @@ tasks:
       account_id: '{{secrets.thetvdb.id}}'
 
 
-##### Clean the series that already ended from trakt series list and add them to the collected list for historical motives
+##### Clean the series that already ended from trakt series list
 #
   clean-series-list:
     priority: 43
@@ -621,6 +621,3 @@ tasks:
       list: '{{secrets.trakt.series}}'
     thetvdb_remove:
       account_id: '{{secrets.thetvdb.id}}'
-    trakt_add:
-      account: '{{secrets.trakt.account}}'
-      list: '{{secrets.trakt.collected}}'
