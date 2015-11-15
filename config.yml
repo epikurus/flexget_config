@@ -131,6 +131,7 @@ templates:
         - \b(spa)(nish)?\b
         - \b(ger)(man)?\b
         - \bcastellano\b
+        - \brus(sian)?\b
 
 ##### Common torrents config
 #
