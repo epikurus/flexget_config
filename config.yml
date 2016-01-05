@@ -161,7 +161,6 @@ templates:
         - '*[sS]ample*'
         - '*[tT]railer*'
       content_filename: "{{tvdb_series_name|default(series_name)|pathscrub}} - {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %}: - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %}: - [{{quality}}]{% endif %}"
-      rename_like_files: yes
       path: "{{secrets.folder.downseries}}{{tvdb_series_name|default(series_name)|pathscrub}}/"
 
 ##### Transmission movies config
@@ -177,7 +176,6 @@ templates:
         - '*[sS]ample*'
         - '*[tT]railer*'
       content_filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %}: - [{{quality}}]{% endif %}"
-      rename_like_files: yes
       path: "{{secrets.folder.downmovies}}{{movie_name|pathscrub}}"
 
 ##### Transmission anime config
