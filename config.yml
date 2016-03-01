@@ -559,10 +559,9 @@ tasks:
 #
   clean-transmission:
     priority: 33
-    interval: 1 day
     disable: details
     clean_transmission:
-      transmission_seed_limits: yes
+      finished_for: 1 day
 
 
 ##### Update trakt series list from local series folders, excluding the ones that already ended
