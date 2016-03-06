@@ -154,8 +154,8 @@ templates:
     transmission:
       host: '{{secrets.transmission.host}}'
       port: 9091
-      username: '{{secrets.transmission.host}}'
-      password: '{{secrets.transmission.host}}'
+      username: '{{secrets.transmission.user}}'
+      password: '{{secrets.transmission.pass}}'
       main_file_only: yes
       include_subs: yes
       skip_files:
@@ -173,8 +173,8 @@ templates:
     transmission:
       host: '{{secrets.transmission.host}}'
       port: 9091
-      username: '{{secrets.transmission.host}}'
-      password: '{{secrets.transmission.host}}'
+      username: '{{secrets.transmission.user}}'
+      password: '{{secrets.transmission.pass}}'
       main_file_only: yes
       include_subs: yes
       skip_files:
@@ -192,8 +192,8 @@ templates:
     transmission:
       host: '{{secrets.transmission.host}}'
       port: 9091
-      username: '{{secrets.transmission.host}}'
-      password: '{{secrets.transmission.host}}'
+      username: '{{secrets.transmission.user}}'
+      password: '{{secrets.transmission.pass}}'
       main_file_only: yes
       content_filename: "{{series_name}} - ep{{series_id}} - [{{quality}}]"
       path: "{{secrets.folder.downanime}}{{series_name|pathscrub}}/"
@@ -575,8 +575,8 @@ tasks:
     clean_transmission:
       host: '{{secrets.transmission.host}}'
       port: 9091
-      username: '{{secrets.transmission.host}}'
-      password: '{{secrets.transmission.host}}'
+      username: '{{secrets.transmission.user}}'
+      password: '{{secrets.transmission.pass}}'
       finished_for: 1 day
 
 
