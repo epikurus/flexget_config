@@ -296,7 +296,7 @@ tasks:
       - transmission-series
       - pushbullet
     discover:
-      ignore_estimations: yes
+      release_estimations: ignore
       interval: 15 minutes
       what:
         - emit_series:
@@ -332,7 +332,7 @@ tasks:
       - transmission-anime
       - pushbullet
     discover:
-      ignore_estimations: yes
+      release_estimations: ignore
       interval: 15 minutes
       what:
         - emit_series:
@@ -417,7 +417,7 @@ tasks:
       - '{{secrets.folder.downmovies}}'
       - '{{secrets.folder.movies}}'
     discover:
-      ignore_estimations: yes
+      release_estimations: ignore
       interval: 15 minutes
       what:
         - emit_movie_queue: yes
@@ -445,7 +445,7 @@ tasks:
       - '{{secrets.folder.downmovies}}'
       - '{{secrets.folder.movies}}'
     discover:
-      ignore_estimations: yes
+      release_estimations: ignore
       interval: 15 minutes
       what:
         - emit_movie_queue: yes
