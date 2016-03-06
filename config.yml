@@ -152,6 +152,10 @@ templates:
 #
   transmission-series:
     transmission:
+      host: '{{secrets.transmission.host}}'
+      port: 9091
+      username: '{{secrets.transmission.host}}'
+      password: '{{secrets.transmission.host}}'
       main_file_only: yes
       include_subs: yes
       skip_files:
@@ -167,6 +171,10 @@ templates:
 #
   transmission-movies:
     transmission:
+      host: '{{secrets.transmission.host}}'
+      port: 9091
+      username: '{{secrets.transmission.host}}'
+      password: '{{secrets.transmission.host}}'
       main_file_only: yes
       include_subs: yes
       skip_files:
@@ -182,6 +190,10 @@ templates:
 #
   transmission-anime:
     transmission:
+      host: '{{secrets.transmission.host}}'
+      port: 9091
+      username: '{{secrets.transmission.host}}'
+      password: '{{secrets.transmission.host}}'
       main_file_only: yes
       content_filename: "{{series_name}} - ep{{series_id}} - [{{quality}}]"
       path: "{{secrets.folder.downanime}}{{series_name|pathscrub}}/"
@@ -561,6 +573,10 @@ tasks:
     priority: 33
     disable: details
     clean_transmission:
+      host: '{{secrets.transmission.host}}'
+      port: 9091
+      username: '{{secrets.transmission.host}}'
+      password: '{{secrets.transmission.host}}'
       finished_for: 1 day
 
 
