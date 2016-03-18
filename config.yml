@@ -550,6 +550,7 @@ tasks:
 
 ##### Download subtitles for the previously queued files
 #
+#might have issues until final release of subliminal 2.0, see: http://discuss.flexget.com/t/subliminal-error/2023/
   download-subtitles:
     priority: 31
     disable: [seen, retry_failed]
