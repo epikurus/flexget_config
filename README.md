@@ -43,7 +43,6 @@ Installation
 * Rename secrets.yml.sample to secrets.yml and change the fields inside according to your accounts and system
 * Authenticate flexget with trakt: http://flexget.com/wiki/Plugins/trakt
 * Create the trakt.tv lists accordingly
-* Change the paths in the move tasks to match your system
 * Alternative names for series can be defined directly with the series plugin in the series.yml file, as shown in the sample file
 * Anime names configuration is done in the anime.yml file and should follow the structure provided in the sample file
 * If you plan on using the anime rename script, you will need to install and configure [kiara](https://github.com/jonybat/kiara/) and create the anime rename list file. If not just remove the lines marked in the move-anime task
