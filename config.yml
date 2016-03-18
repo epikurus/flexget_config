@@ -32,8 +32,6 @@ templates:
         - rejecting
       search_rss:
         - Error
-      thetvdb_add:
-        - skipping...
       assume_quality:
         - ""
 
@@ -44,9 +42,6 @@ templates:
     include: series.yml
     configure_series:
       from:
-# Alternative for when trakt fails
-#        thetvdb_favorites:
-#          account_id: '{{secrets.thetvdb.id}}'
         text:
           url: 'file://{{secrets.list.series}}'
           entry:
@@ -592,7 +587,6 @@ tasks:
       if: -251
       manipulate: -252
       trakt_add: -253
-      thetvdb_add: -254
     metainfo_series: yes
     filesystem:
       path: '/{{secrets.folder.root}}{{secrets.folder.series}}'
@@ -611,8 +605,6 @@ tasks:
     trakt_add:
       account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.series}}'
-    thetvdb_add:
-      account_id: '{{secrets.thetvdb.id}}'
 
 
 ##### Clean the series that already ended from trakt series list
@@ -633,5 +625,3 @@ tasks:
     trakt_remove:
       account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.series}}'
-    thetvdb_remove:
-      account_id: '{{secrets.thetvdb.id}}'
