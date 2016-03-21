@@ -145,7 +145,7 @@ templates:
 
 ##### Transmission series config
 #
-  transmission-series:
+  transmission:
     transmission:
       host: '{{secrets.transmission.host}}'
       port: 9091
@@ -159,6 +159,11 @@ templates:
         - '*.txt'
         - '*[sS]ample*'
         - '*[tT]railer*'
+
+##### Transmission series config
+#
+  transmission-series:
+    transmission:
       content_filename: "{{tvdb_series_name|default(series_name)|pathscrub}} - {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %}: - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %}: - [{{quality}}]{% endif %}"
       path: "/{{secrets.folder.root}}{{secrets.folder.downseries}}{{tvdb_series_name|default(series_name)|pathscrub}}/"
 
@@ -166,18 +171,6 @@ templates:
 #
   transmission-movies:
     transmission:
-      host: '{{secrets.transmission.host}}'
-      port: 9091
-      username: '{{secrets.transmission.user}}'
-      password: '{{secrets.transmission.pass}}'
-      main_file_only: yes
-      include_subs: yes
-      skip_files:
-        - '*.nfo'
-        - '*.sfv'
-        - '*.txt'
-        - '*[sS]ample*'
-        - '*[tT]railer*'
       content_filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %}: - [{{quality}}]{% endif %}"
       path: "/{{secrets.folder.root}}{{secrets.folder.downmovies}}{{movie_name|pathscrub}}"
 
@@ -185,11 +178,6 @@ templates:
 #
   transmission-anime:
     transmission:
-      host: '{{secrets.transmission.host}}'
-      port: 9091
-      username: '{{secrets.transmission.user}}'
-      password: '{{secrets.transmission.pass}}'
-      main_file_only: yes
       content_filename: "{{series_name}} - ep{{series_id}} - [{{quality}}]"
       path: "/{{secrets.folder.root}}{{secrets.folder.downanime}}{{series_name|pathscrub}}/"
 
@@ -245,6 +233,7 @@ tasks:
     manual: yes
     disable: [seen, seen_info_hash, retry_failed]
     template:
+      - transmission
       - transmission-series
       - pushbullet
     filesystem:
@@ -268,6 +257,7 @@ tasks:
       - series
       - regex
       - torrents
+      - transmission
       - transmission-series
       - pushbullet
     inputs:
@@ -288,6 +278,7 @@ tasks:
       - series
       - regex
       - torrents
+      - transmission
       - transmission-series
       - pushbullet
     discover:
@@ -308,6 +299,7 @@ tasks:
     template:
       - anime
       - torrents
+      - transmission
       - transmission-anime
       - pushbullet
     inputs:
@@ -324,6 +316,7 @@ tasks:
     template:
       - anime
       - torrents
+      - transmission
       - transmission-anime
       - pushbullet
     discover:
@@ -380,6 +373,7 @@ tasks:
     manual: yes
     disable: [seen, seen_info_hash, retry_failed]
     template:
+      - transmission
       - transmission-movies
       - pushbullet
     filesystem:
@@ -406,6 +400,7 @@ tasks:
       - movies-1080p
       - regex
       - torrents
+      - transmission
       - transmission-movies
       - pushbullet
     exists_movie:
@@ -434,6 +429,7 @@ tasks:
       - movies-720p
       - regex
       - torrents
+      - transmission
       - transmission-movies
       - pushbullet
     exists_movie:
