@@ -59,9 +59,6 @@ templates:
     content_filter:
       require:
         - '*.mkv'
-      reject:
-        - '*.rar'
-        - '*.zip'
 
 ##### Anime config
 #
@@ -88,10 +85,6 @@ templates:
     content_size:
       min: 1000
       max: 6000
-    content_filter:
-      reject:
-        - '*.rar'
-        - '*.zip'
 
   movies-720p:
     tmdb_lookup: yes
@@ -100,10 +93,6 @@ templates:
     content_size:
       min: 500
       max: 3000
-    content_filter:
-      reject:
-        - '*.rar'
-        - '*.zip'
 
 ##### Pushbullet config
 #
@@ -115,7 +104,7 @@ templates:
 
 ##### Common rejections
 #
-  regex:
+  reject:
     regexp:
       reject:
         - (s|d)ub(s|bed|lado|titulado)?\b
@@ -127,6 +116,10 @@ templates:
         - \b(ger)(man)?\b
         - \bcastellano\b
         - \brus(sian)?\b
+    content_filter:
+      reject:
+        - '*.rar'
+        - '*.zip'
 
 ##### Common torrents config
 #
@@ -255,7 +248,7 @@ tasks:
     priority: 5
     template:
       - series
-      - regex
+      - reject
       - torrents
       - transmission
       - transmission-series
@@ -276,7 +269,7 @@ tasks:
     interval: 4 hour
     template:
       - series
-      - regex
+      - reject
       - torrents
       - transmission
       - transmission-series
@@ -398,7 +391,7 @@ tasks:
     interval: 2 hour
     template:
       - movies-1080p
-      - regex
+      - reject
       - torrents
       - transmission
       - transmission-movies
@@ -427,7 +420,7 @@ tasks:
     delay: 1 day
     template:
       - movies-720p
-      - regex
+      - reject
       - torrents
       - transmission
       - transmission-movies
