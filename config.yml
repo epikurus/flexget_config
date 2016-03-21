@@ -416,8 +416,7 @@ tasks:
 #
   download-movies-720p:
     priority: 17
-    interval: 4 hour
-    delay: 1 day
+    interval: 2 hour
     template:
       - movies-720p
       - reject
@@ -436,6 +435,8 @@ tasks:
       from:
         - torrentz: good
         - search_rss: https://kickass.unblocked.la/usearch/{{search_term}}/?rss=1
+    if:
+      - tmdb_year > now.year - 1: reject
     trakt_remove:
       account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.movies}}'
