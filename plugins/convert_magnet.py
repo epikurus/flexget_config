@@ -93,11 +93,10 @@ class ConvertMagnet(object):
                 if not torrent_file.startswith('/'):
                     torrent_file = '/' + torrent_file
                 entry['url'] = torrent_file
+                entry['file'] = torrent_file
                 entry['urls'].append('file://{}'.format(torrent_file))
 
 
 @event('plugin.register')
 def register_plugin():
     plugin.register(ConvertMagnet, 'convert_magnet', api_ver=2)
-
-
