@@ -3,7 +3,7 @@
 This is not a comprehensive feature list, and many settings were tuned to personal preference. It is also under constant development.
 
 It currently does the following (ideally by this order):
-* Populates the series database with a set interval (maily to allow fresh starts of the series db)
+* Populates the series database with a set interval (mainly to allow fresh starts of the series db)
 * Gets series from a custom trakt list and writes them to a file, and then looks up for their tvdb name, to have series names ready for kodi (since trakt v2 all series have the year in the name)
 * Looks on the series download folder for .torrent files and adds them to transmission
 * Looks for series on RSS feeds and downloads them
@@ -12,7 +12,7 @@ It currently does the following (ideally by this order):
 * Looks for movies in the drive and removes them from both the movie queue and the trakt list (this has a similar effect to the populate task for series db)
 * Fills the movie queue with the movies in the trakt list
 * Looks on the movies download folder for .torrent files and adds them to transmission
-* Discovers and downloads 1080p movies and 720p movies with 1 day delay (to allow wait for a 1080p release but still be able to get movies where 1080p might not be an option), and removes them from the trakt list if downloaded
+* Discovers and downloads 1080p movies and 720p movies (it only downloads 720p if the movie is not recent, where 1080p not be available), and removes them from the trakt list if downloaded
 * Looks on the download folders for series and movies, and moves them to the respective folder on the drive, while renaming it and adding it to the subtitle queue
 * Does a similar thing for anime, with the exception of the subtitles, but also adding the filename to a file to allow anime renaming from an external program
 * Downloads subtitles for the files in the subtitle queue
@@ -40,13 +40,14 @@ Installation
 ------------
 
 * Clone this repository's contents into ~/.flexget
-* Rename secrets.yml.sample to secrets.yml and change the fields inside according to your accounts and system
 * Authenticate flexget with trakt: http://flexget.com/wiki/Plugins/trakt
+* Rename secrets.yml.sample to secrets.yml and change the fields inside according to your accounts and system
 * Create the trakt.tv lists accordingly
+* Change the transmission port in the config.yml, in both the transmission template and the clean-transmission task
 * Alternative names for series can be defined directly with the series plugin in the series.yml file, as shown in the sample file
 * Anime names configuration is done in the anime.yml file and should follow the structure provided in the sample file
+* If you dont use any of the above two, you need to comment the respective includes (and possibly the templates) in config.yml
 * If you plan on using the anime rename script, you will need to install and configure [kiara](https://github.com/jonybat/kiara/) and create the anime rename list file. If not just remove the lines marked in the move-anime task
-* Remove/edit everything else that does not fit your setup and needs
 * Finally, add flexget to cron (i use 30m, but i guess 1/2h is also fine):
 
 `*/30 * * * * /usr/local/bin/flexget execute`
