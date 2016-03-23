@@ -34,6 +34,8 @@ templates:
         - Error
       assume_quality:
         - ""
+      utils.requests:
+        - Waiting
 
 ##### Series config
 #
