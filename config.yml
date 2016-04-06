@@ -494,7 +494,9 @@ tasks:
     subtitle_queue:
       action: add
       path: "{{output}}"
-
+    exec:
+      on_exit:
+        for_accepted: find '/{{secrets.folder.root}}{{secrets.folder.downseries}}'* -type d -empty -delete
 
 ##### Move anime from downloads folder to respective folders. Needed intermediary to provide dynamic paths to rename-anime task
 #
@@ -520,7 +522,7 @@ tasks:
         for_accepted: echo "{{output}}" >> '{{secrets.list.animerename}}'
       on_exit:
         phase: '{{secrets.script.animerenamer}}'
-
+        for_accepted: find '/{{secrets.folder.root}}{{secrets.folder.downanime}}'* -type d -empty -delete
 
 ##### Move movies from downloads folder to the movies folder, along with possible subtitles and adding the files to the subtitle queue
 #
@@ -551,7 +553,9 @@ tasks:
     subtitle_queue:
       action: add
       path: "{{output}}"
-
+    exec:
+      on_exit:
+        for_accepted: find '/{{secrets.folder.root}}{{secrets.folder.downmovies}}'* -type d -empty -delete
 
 ##### Download subtitles for the previously queued files
 #
