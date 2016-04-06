@@ -176,6 +176,26 @@ templates:
       content_filename: "{{series_name}} - ep{{series_id}} - [{{quality}}]"
       path: "/{{secrets.folder.root}}{{secrets.folder.downanime}}{{series_name|pathscrub}}/"
 
+##### Disable builtins for some tasks
+#
+  disable-seen-retry:
+    disable:
+      - seen
+      - seen_info_hash
+      - retry_failed
+
+##### Series metainfo mainly for move and update tasks
+#
+  series-metainfo:
+    metainfo_series: yes
+    thetvdb_lookup: yes
+
+##### Movies metainfo mainly for move and update tasks
+#
+  movies-metainfo:
+    tmdb_lookup: yes
+    parsing:
+      movie: guessit
 
 tasks:
 
@@ -184,13 +204,14 @@ tasks:
   populate-series-db:
     priority: 1
     interval: 4 hour
+    template:
+      - series-metainfo
     seen: local
     filesystem:
       path: '/{{secrets.folder.root}}{{secrets.folder.series}}'
       recursive: yes
       retrieve: files
       regexp: '.*\.(avi|mkv|mp4)$'
-    thetvdb_lookup: yes
     accept_all: yes
     configure_series:
       from:
@@ -206,11 +227,12 @@ tasks:
   fetch-series:
     priority: 3
     disable: builtins
+    template:
+      - series-metainfo
     trakt_list:
       account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.series}}'
       type: shows
-    thetvdb_lookup: yes
     accept_all: yes
     set:
       title: "{{tvdb_series_name|escape|replace('&#39;', '')}}"
@@ -226,8 +248,9 @@ tasks:
   download-series-manual:
     priority: 4
     manual: yes
-    disable: [seen, seen_info_hash, retry_failed]
     template:
+      - disable-seen-retry
+      - series-metainfo
       - transmission
       - transmission-series
       - pushbullet
@@ -236,8 +259,6 @@ tasks:
       mask: '*.torrent'
     parsing:
       series: guessit
-    metainfo_series: yes
-    thetvdb_lookup: yes
     accept_all: yes
     exec:
       on_output:
@@ -331,16 +352,15 @@ tasks:
 #
   clean-movie-queue:
     priority: 11
-    disable: seen
     interval: 2 hour
+    template:
+      - disable-seen-retry
+      - movies-metainfo
     filesystem:
       path: '/{{secrets.folder.root}}{{secrets.folder.movies}}'
       recursive: yes
       retrieve: files
       regexp: '.*\.(avi|mkv|mp4)$'
-    parsing:
-      movie: guessit
-    tmdb_lookup: yes
     accept_all: yes
     movie_queue: accept
     trakt_remove:
@@ -366,17 +386,15 @@ tasks:
   download-movies-manual:
     priority: 15
     manual: yes
-    disable: [seen, seen_info_hash, retry_failed]
     template:
+      - disable-seen-retry
+      - movies-metainfo
       - transmission
       - transmission-movies
       - pushbullet
     filesystem:
       path: '/{{secrets.folder.root}}{{secrets.folder.downmovies}}'
       mask: '*.torrent'
-    parsing:
-      movie: guessit
-    tmdb_lookup: yes
     accept_all: yes
     exec:
       on_output:
@@ -414,7 +432,7 @@ tasks:
       list: '{{secrets.trakt.movies}}'
 
 
- ##### Download 720p movies with 1 day delay from higher quality
+##### Download 720p movies if the movie is not recent
 #
   download-movies-720p:
     priority: 17
@@ -448,7 +466,9 @@ tasks:
 #
   move-series:
     priority: 21
-    disable: [seen, retry_failed]
+    template:
+      - disable-seen-retry
+      - series-metainfo
     filesystem:
       path: '/{{secrets.folder.root}}{{secrets.folder.downseries}}'
       recursive: yes
@@ -457,8 +477,6 @@ tasks:
 # might be needed for some series, but causes issues with "name (year)" based series, like scandal
 #    parsing:
 #      series: guessit
-    metainfo_series: yes
-    thetvdb_lookup: yes
     accept_all: yes
     regexp:
       reject:
@@ -482,7 +500,8 @@ tasks:
 #
   move-anime:
     priority: 23
-    disable: [seen, retry_failed]
+    template:
+      - disable-seen-retry
     filesystem:
       path: '/{{secrets.folder.root}}{{secrets.folder.downanime}}'
       recursive: yes
@@ -507,15 +526,14 @@ tasks:
 #
   move-movies:
     priority: 26
-    disable: [seen, retry_failed]
+    template:
+      - disable-seen-retry
+      - movies-metainfo
     filesystem:
       path: '/{{secrets.folder.root}}{{secrets.folder.downmovies}}'
       recursive: yes
       retrieve: files
       regexp: '.*\.(avi|mkv|mp4)$'
-    parsing:
-      movie: guessit
-    tmdb_lookup: yes
     accept_all: yes
     regexp:
       reject:
@@ -537,10 +555,11 @@ tasks:
 
 ##### Download subtitles for the previously queued files
 #
-#might have issues until final release of subliminal 2.0, see: http://discuss.flexget.com/t/subliminal-error/2023/
+# Might have issues until final release of subliminal 2.0, see: http://discuss.flexget.com/t/subliminal-error/2023/
   download-subtitles:
     priority: 31
-    disable: [seen, retry_failed]
+    template:
+      - disable-seen-retry
     subtitle_queue: emit
     accept_all: yes
     subliminal:
@@ -573,19 +592,18 @@ tasks:
   update-series-list:
     priority: 41
     interval: 1 day
-    disable: seen
-    seen: local
+    template:
+      - disable-seen-retry
+      - series-metainfo
     plugin_priority:
       if: -251
       manipulate: -252
       trakt_add: -253
-    metainfo_series: yes
     filesystem:
       path: '/{{secrets.folder.root}}{{secrets.folder.series}}'
       recursive: yes
       retrieve: files
       regexp: '.*\.(avi|mkv|mp4)$'
-    thetvdb_lookup: yes
     manipulate:
       - series_season:
           remove: yes
@@ -603,15 +621,16 @@ tasks:
 #
   clean-series-list:
     priority: 43
-    disable: seen
     interval: 1 day
     delay: 8 day
-    template: pushbullet
+    template:
+      - disable-seen-retry
+      - series-metainfo
+      - pushbullet
     trakt_list:
       account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.series}}'
       type: shows
-    thetvdb_lookup: yes
     if:
       - tvdb_status == 'Ended': accept
     trakt_remove:
