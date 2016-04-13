@@ -44,11 +44,7 @@ templates:
     include: series.yml
     configure_series:
       from:
-        text:
-          url: 'file://{{secrets.list.series}}'
-          entry:
-            title: "(.*)"
-            url: "(.*)"
+        entry_list: trakt-series
       settings:
         identified_by: ep
         timeframe: 15 minutes
@@ -222,12 +218,23 @@ tasks:
         tracking: no
 
 
-##### Fetch, format and output trakt series list to temp file
+##### Purge the series list to allow full sync with trakt series list
 #
-  fetch-series:
-    priority: 3
-    disable: builtins
+  purge-series-list:
+    priority: 2
     template:
+      - disable-seen-retry
+    entry_list: trakt-series
+    list_queue:
+      - entry_list: trakt-series
+
+
+##### Fetch, format and output trakt series list to a custom entry list
+#
+  fill-series-list:
+    priority: 3
+    template:
+      - disable-seen-retry
       - series-metainfo
     trakt_list:
       account: '{{secrets.trakt.account}}'
@@ -236,11 +243,8 @@ tasks:
     accept_all: yes
     set:
       title: "{{tvdb_series_name|escape|replace('&#39;', '')}}"
-    exec:
-      on_start:
-        phase: rm -f '{{secrets.list.series}}' && touch '{{secrets.list.series}}'
-      on_output:
-        for_entries: echo "{{title}}" >> '{{secrets.list.series}}'
+    list_add:
+      - entry_list: trakt-series
 
 
 ##### Download episodes from manually downloaded torrents
