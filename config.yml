@@ -82,7 +82,7 @@ templates:
 #
   movies-1080p:
     tmdb_lookup: yes
-    movie_queue: accept
+    movie_list: trakt-movies
     quality: 1080p webdl+ !h265
     content_size:
       min: 1000
@@ -90,7 +90,7 @@ templates:
 
   movies-720p:
     tmdb_lookup: yes
-    movie_queue: accept
+    movie_list: trakt-movies
     quality: 720p webdl+ !h265
     content_size:
       min: 500
@@ -362,10 +362,11 @@ tasks:
       retrieve: files
       regexp: '.*\.(avi|mkv|mp4)$'
     accept_all: yes
-    movie_queue: accept
-    trakt_remove:
-      account: '{{secrets.trakt.account}}'
-      list: '{{secrets.trakt.movies}}'
+    list_remove:
+      - movie_list: trakt-movies
+      - trakt_list:
+          account: '{{secrets.trakt.account}}'
+          list: '{{secrets.trakt.movies}}'
 
 
 ##### Fill the movie queue with movies from trakt list
@@ -378,7 +379,8 @@ tasks:
       type: movies
       strip_dates: yes
     accept_all: yes
-    movie_queue: add
+    list_add:
+      - movie_list: trakt-movies
 
 
 ##### Download movies manually downloaded torrents
@@ -399,9 +401,10 @@ tasks:
     exec:
       on_output:
         for_accepted: rm -f "{{location}}"
-    trakt_remove:
-      account: '{{secrets.trakt.account}}'
-      list: '{{secrets.trakt.movies}}'
+    list_remove:
+      - trakt_list:
+          account: '{{secrets.trakt.account}}'
+          list: '{{secrets.trakt.movies}}'
 
 
 ##### Download 1080p movies
@@ -423,13 +426,16 @@ tasks:
       release_estimations: ignore
       interval: 15 minutes
       what:
-        - emit_movie_queue: yes
+        - movie_list: trakt-movies
       from:
         - torrentz: good
         - search_rss: https://kickass.unblocked.la/usearch/{{search_term}}/?rss=1
-    trakt_remove:
-      account: '{{secrets.trakt.account}}'
-      list: '{{secrets.trakt.movies}}'
+    list_queue:
+      - movie_list: trakt-movies
+    list_remove:
+      - trakt_list:
+          account: '{{secrets.trakt.account}}'
+          list: '{{secrets.trakt.movies}}'
 
 
 ##### Download 720p movies if the movie is not recent
@@ -451,15 +457,18 @@ tasks:
       release_estimations: ignore
       interval: 15 minutes
       what:
-        - emit_movie_queue: yes
+        - movie_list: trakt-movies
       from:
         - torrentz: good
         - search_rss: https://kickass.unblocked.la/usearch/{{search_term}}/?rss=1
     if:
       - tmdb_year > now.year - 1: reject
-    trakt_remove:
-      account: '{{secrets.trakt.account}}'
-      list: '{{secrets.trakt.movies}}'
+    list_queue:
+      - movie_list: trakt-movies
+    list_remove:
+      - trakt_list:
+          account: '{{secrets.trakt.account}}'
+          list: '{{secrets.trakt.movies}}'
 
 
 ##### Move series from downloads folder to respective folders, along with existing subtitles and adding the files to the subtitle queue
@@ -602,7 +611,7 @@ tasks:
     plugin_priority:
       if: -251
       manipulate: -252
-      trakt_add: -253
+      list_add: -253
     filesystem:
       path: '/{{secrets.folder.root}}{{secrets.folder.series}}'
       recursive: yes
@@ -616,9 +625,10 @@ tasks:
     accept_all: yes
     if:
       - tvdb_status == 'Ended': reject
-    trakt_add:
-      account: '{{secrets.trakt.account}}'
-      list: '{{secrets.trakt.series}}'
+    list_add:
+      - trakt_list:
+          account: '{{secrets.trakt.account}}'
+          list: '{{secrets.trakt.series}}'
 
 
 ##### Clean the series that already ended from trakt series list
@@ -637,6 +647,7 @@ tasks:
       type: shows
     if:
       - tvdb_status == 'Ended': accept
-    trakt_remove:
-      account: '{{secrets.trakt.account}}'
-      list: '{{secrets.trakt.series}}'
+    list_remove:
+      - trakt_list:
+          account: '{{secrets.trakt.account}}'
+          list: '{{secrets.trakt.series}}'
