@@ -225,7 +225,8 @@ tasks:
     template:
       - disable-seen-retry
     entry_list: trakt-series
-    list_queue:
+    accept_all: yes
+    list_remove:
       - entry_list: trakt-series
 
 
