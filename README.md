@@ -49,6 +49,4 @@ Installation
 * Anime names configuration is done in the anime.yml file and should follow the structure provided in the sample file
 * If you dont use any of the above two, you need to comment the respective includes (and possibly the templates) in config.yml
 * If you plan on using the anime rename script, you will need to install and configure [kiara](https://github.com/jonybat/kiara/) and create the anime rename list file. If not just remove the lines marked in the move-anime task
-* Finally, add flexget to cron (i use 30m, but i guess 1/2h is also fine):
-
-`*/30 * * * * /usr/local/bin/flexget execute`
+* Finally, add the necessary files to configure flexget as a service (daemon). See: http://flexget.com/wiki/Daemon/Startup

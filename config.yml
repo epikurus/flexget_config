@@ -1,4 +1,18 @@
 ﻿secrets: secrets.yml
+schedules:
+  - tasks: ['populate-*', 'clean-*', 'update-*']
+    schedule:
+      hour: 0
+  - tasks: ['purge-*', 'fill-*', '*-rss']
+    schedule:
+      minute: 0,30
+  - tasks: ['*-discover', '*-manual']
+    schedule:
+      hour: '*/2'
+  - tasks: ['move-*', download-subtitles]
+    schedule:
+      minute: 15,45
+
 templates:
   global:
     no_entries_ok: yes
@@ -185,6 +199,9 @@ templates:
   series-metainfo:
     metainfo_series: yes
     thetvdb_lookup: yes
+# might be needed for some series, but causes issues with "name (year)" based series, like scandal
+#    parsing:
+#      series: guessit
 
 ##### Movies metainfo mainly for move and update tasks
 #
@@ -199,7 +216,6 @@ tasks:
 #
   populate-series-db:
     priority: 1
-    interval: 4 hour
     template:
       - series-metainfo
     seen: local
@@ -252,7 +268,6 @@ tasks:
 #
   download-series-manual:
     priority: 4
-    manual: yes
     template:
       - disable-seen-retry
       - series-metainfo
@@ -290,11 +305,10 @@ tasks:
           all_entries: yes
 
 
-##### Discover and download older episodes and pilots from recently added series, set with interval to avoid spam
+##### Discover and download older episodes and pilots from recently added series
 #
   download-series-discover:
     priority: 6
-    interval: 4 hour
     template:
       - series
       - reject
@@ -329,11 +343,10 @@ tasks:
           all_entries: yes
 
 
-##### Discover and download anime, set with interval since it does not return results often
+##### Discover and download anime
 #
   download-anime-discover:
     priority: 9
-    interval: 4 hour
     template:
       - anime
       - torrents
@@ -357,7 +370,6 @@ tasks:
 #
   clean-movie-queue:
     priority: 11
-    interval: 2 hour
     template:
       - disable-seen-retry
       - movies-metainfo
@@ -392,7 +404,6 @@ tasks:
 #
   download-movies-manual:
     priority: 15
-    manual: yes
     template:
       - disable-seen-retry
       - movies-metainfo
@@ -412,11 +423,10 @@ tasks:
           list: '{{secrets.trakt.movies}}'
 
 
-##### Download 1080p movies
+##### Discover and download 1080p movies
 #
-  download-movies-1080p:
+  download-movies-1080p-discover:
     priority: 16
-    interval: 2 hour
     template:
       - movies-1080p
       - reject
@@ -443,11 +453,10 @@ tasks:
           list: '{{secrets.trakt.movies}}'
 
 
-##### Download 720p movies if the movie is not recent
+##### Discover and download 720p movies, if the movie is not recent
 #
-  download-movies-720p:
+  download-movies-720p-discover:
     priority: 17
-    interval: 2 hour
     template:
       - movies-720p
       - reject
@@ -488,9 +497,6 @@ tasks:
       recursive: yes
       retrieve: files
       regexp: '.*\.(avi|mkv|mp4)$'
-# might be needed for some series, but causes issues with "name (year)" based series, like scandal
-#    parsing:
-#      series: guessit
     accept_all: yes
     regexp:
       reject:
@@ -512,7 +518,8 @@ tasks:
       on_exit:
         for_accepted: find '/{{secrets.folder.root}}{{secrets.folder.downseries}}'* -type d -empty -delete
 
-##### Move anime from downloads folder to respective folders. Needed intermediary to provide dynamic paths to rename-anime task
+
+##### Move anime from downloads folder to respective folders
 #
   move-anime:
     priority: 23
@@ -571,6 +578,7 @@ tasks:
       on_exit:
         for_accepted: find '/{{secrets.folder.root}}{{secrets.folder.downmovies}}'* -type d -empty -delete
 
+
 ##### Download subtitles for the previously queued files
 #
 # Might have issues until final release of subliminal 2.0, see: http://discuss.flexget.com/t/subliminal-error/2023/
@@ -609,7 +617,6 @@ tasks:
 #
   update-series-list:
     priority: 41
-    interval: 1 day
     template:
       - disable-seen-retry
       - series-metainfo
@@ -640,7 +647,6 @@ tasks:
 #
   clean-series-list:
     priority: 43
-    interval: 1 day
     delay: 8 day
     template:
       - disable-seen-retry
