@@ -1,4 +1,4 @@
-﻿secrets: secrets.yml
+secrets: secrets.yml
 schedules:
   - tasks: ['populate-*', 'clean-*', 'update-*']
     schedule:
@@ -61,9 +61,9 @@ templates:
         entry_list: trakt-series
       settings:
         identified_by: ep
-        timeframe: 15 minutes
-        target: hdtv 720p !h265
-        quality: webrip+ 720p !h265
+        timeframe: 16 hours
+        target: hdtv+ 720p !10bit !h265
+        quality: webrip+ 720p !10bit !h265
         propers: 16 hours
         specials: no
     content_size:
@@ -93,7 +93,7 @@ templates:
   movies-1080p:
     tmdb_lookup: yes
     movie_list: trakt-movies
-    quality: 1080p webdl+ !h265
+    quality: 1080p webdl+ !10bit !h265
     content_size:
       min: 1000
       max: 6000
@@ -101,7 +101,7 @@ templates:
   movies-720p:
     tmdb_lookup: yes
     movie_list: trakt-movies
-    quality: 720p webdl+ !h265
+    quality: 720p webdl+ !10bit !h265
     content_size:
       min: 500
       max: 3000
