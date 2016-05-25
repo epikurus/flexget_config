@@ -267,7 +267,7 @@ tasks:
 ##### Download episodes from manually downloaded torrents
 #
   download-series-manual:
-    priority: 4
+    priority: 11
     template:
       - disable-seen-retry
       - series-metainfo
@@ -288,7 +288,7 @@ tasks:
 ##### Download episodes from RSS feeds
 #
   download-series-rss:
-    priority: 5
+    priority: 12
     template:
       - series
       - reject
@@ -308,7 +308,7 @@ tasks:
 ##### Discover and download older episodes and pilots from recently added series
 #
   download-series-discover:
-    priority: 6
+    priority: 13
     template:
       - series
       - reject
@@ -330,7 +330,7 @@ tasks:
 ##### Download anime from RSS feed
 #
   download-anime-rss:
-    priority: 8
+    priority: 16
     template:
       - anime
       - torrents
@@ -346,7 +346,7 @@ tasks:
 ##### Discover and download anime
 #
   download-anime-discover:
-    priority: 9
+    priority: 17
     template:
       - anime
       - torrents
@@ -369,7 +369,7 @@ tasks:
 ##### Remove manually movies downloaded from the movie queue and trakt list
 #
   clean-movie-queue:
-    priority: 11
+    priority: 22
     template:
       - disable-seen-retry
       - movies-metainfo
@@ -389,7 +389,7 @@ tasks:
 ##### Fill the movie queue with movies from trakt list
 #
   fill-movie-queue:
-    priority: 12
+    priority: 23
     trakt_list:
       account: '{{secrets.trakt.account}}'
       list: '{{secrets.trakt.movies}}'
@@ -403,7 +403,7 @@ tasks:
 ##### Download movies manually downloaded torrents
 #
   download-movies-manual:
-    priority: 15
+    priority: 24
     template:
       - disable-seen-retry
       - movies-metainfo
@@ -426,7 +426,7 @@ tasks:
 ##### Discover and download 1080p movies
 #
   download-movies-1080p-discover:
-    priority: 16
+    priority: 26
     template:
       - movies-1080p
       - reject
@@ -456,7 +456,7 @@ tasks:
 ##### Discover and download 720p movies, if the movie is not recent
 #
   download-movies-720p-discover:
-    priority: 17
+    priority: 27
     template:
       - movies-720p
       - reject
@@ -488,7 +488,7 @@ tasks:
 ##### Move series from downloads folder to respective folders, along with existing subtitles and adding the files to the subtitle queue
 #
   move-series:
-    priority: 21
+    priority: 31
     template:
       - disable-seen-retry
       - series-metainfo
@@ -522,7 +522,7 @@ tasks:
 ##### Move anime from downloads folder to respective folders
 #
   move-anime:
-    priority: 23
+    priority: 32
     template:
       - disable-seen-retry
     filesystem:
@@ -548,7 +548,7 @@ tasks:
 ##### Move movies from downloads folder to the movies folder, along with possible subtitles and adding the files to the subtitle queue
 #
   move-movies:
-    priority: 26
+    priority: 33
     template:
       - disable-seen-retry
       - movies-metainfo
@@ -583,7 +583,7 @@ tasks:
 #
 # Might have issues until final release of subliminal 2.0, see: http://discuss.flexget.com/t/subliminal-error/2023/
   download-subtitles:
-    priority: 31
+    priority: 35
     template:
       - disable-seen-retry
     subtitle_queue: emit
@@ -603,7 +603,7 @@ tasks:
 ##### Clean finished torrents from transmission
 #
   clean-transmission:
-    priority: 33
+    priority: 37
     disable: details
     clean_transmission:
       host: '{{secrets.transmission.host}}'
