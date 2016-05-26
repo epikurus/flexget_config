@@ -28,7 +28,7 @@ class AnidbList(object):
         'type': 'object',
         'properties': {
             'user_id': {
-                'type': 'integer',
+                'type': 'string',
                 'pattern': USER_ID_RE,
                 'error_pattern': 'user_id must be in the form XXXXXXX'},
             'type': {
