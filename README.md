@@ -9,7 +9,7 @@ It currently does the following (ideally by this order):
 * Looks on the series download folder for .torrent files and adds them to transmission
 * Looks for series on RSS feeds and downloads them
 * Discovers and downloads series that don't have any download history or are missing (with a set interval because it should not happen often)
-* Does the last 2 tasks, but this time for anime
+* Does the previous tasks, but this time for anime series and movies, using anidb as a list source instead
 * Looks for movies in the drive and removes them from both the movie queue and the trakt list (this has a similar effect to the populate task for series db)
 * Fills the movie queue with the movies in the trakt list
 * Looks on the movies download folder for .torrent files and adds them to transmission
@@ -45,8 +45,7 @@ Installation
 * Rename secrets.yml.sample to secrets.yml and change the fields inside according to your accounts and system
 * Create the trakt.tv lists accordingly
 * Change the transmission port in the config.yml, in both the transmission template and the clean-transmission task
-* Alternative names for series can be defined directly with the series plugin in the series.yml file, as shown in the sample file
-* Anime names configuration is done in the anime.yml file and should follow the structure provided in the sample file
-* If you dont use any of the above two, you need to comment the respective includes (and possibly the templates) in config.yml
+* Alternative names, quality, begin episode and other series settings can be defined directly with the series plugin in the series.yml and anime.yml files, as shown in the sample files
+* If you dont use any of the above files, you need to comment the respective includes (and possibly the templates) in config.yml
 * If you plan on using the anime rename script, you will need to install and configure [kiara](https://github.com/jonybat/kiara/) and create the anime rename list file. If not just remove the lines marked in the move-anime task
 * Finally, add the necessary files to configure flexget as a service (daemon). See: http://flexget.com/wiki/Daemon/Startup

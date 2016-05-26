@@ -1,9 +1,4 @@
 series:
-  episodes:
-    - Dragon Ball Super:
-        from_group: DragonTeam
-        begin: 1
-  movies:
-    - Code Geass Boukoku no Akito:
-        alternate_name: Gekijouban Code Geass Boukoku no Akito
-        begin: 4
+  - Naruto Shippuuden:
+      from_group: horriblesubs
+      quality: 480p
