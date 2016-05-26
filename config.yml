@@ -50,6 +50,8 @@ templates:
         - ""
       utils.requests:
         - Waiting
+      anidb_list:
+        - Entry does not match
 
 ##### Series config
 #
@@ -76,17 +78,21 @@ templates:
 #
   anime:
     include: anime.yml
-    series:
-      settings:
-        episodes:
-          identified_by: sequence
-          quality: 720p !10bit !h265
-          special_ids:
-            - OVA
-        movies:
-          identified_by: sequence
-          quality: 720p+ !10bit !h265
-    assume_quality: 720p
+    sequence:
+      - configure_series:
+          from:
+            entry_list: anidb-series
+          settings:
+            identified_by: sequence
+            quality: 720p !10bit !h265
+            special_ids:
+              - OVA
+      - configure_series:
+          from:
+            entry_list: anidb-movies
+          settings:
+            identified_by: sequence
+            quality: 720p+ !10bit !h265
 
 ##### Movies config
 #
@@ -262,6 +268,66 @@ tasks:
       title: "{{tvdb_series_name|escape|replace('&#39;', '')}}"
     list_add:
       - entry_list: trakt-series
+
+
+##### Purge the series list to allow full sync with anidb series list
+#
+  purge-anime-series-list:
+    priority: 6
+    template:
+      - disable-seen-retry
+    entry_list: anidb-series
+    accept_all: yes
+    list_remove:
+      - entry_list: anidb-series
+
+
+##### Purge the series list to allow full sync with anidb movies list
+#
+  purge-anime-movies-list:
+    priority: 7
+    template:
+      - disable-seen-retry
+    entry_list: anidb-movies
+    accept_all: yes
+    list_remove:
+      - entry_list: anidb-movies
+
+
+##### Fetch, format and output anidb series list to a custom entry list
+#
+  fill-anime-series-list:
+    priority: 8
+    template:
+      - disable-seen-retry
+      - series-metainfo
+    anidb_list:
+      user_id: '{{secrets.anidb.id}}'
+      type: shows
+      sublist: toget
+    accept_all: yes
+    set:
+      title: "{{anidb_name|re_replace('[/-]', ' ')|re_replace('[;:`´()]', '')}}"
+    list_add:
+      - entry_list: anidb-series
+
+
+##### Fetch, format and output anidb movies list to a custom entry list
+#
+  fill-anime-movies-list:
+    priority: 9
+    template:
+      - disable-seen-retry
+      - series-metainfo
+    anidb_list:
+      user_id: '{{secrets.anidb.id}}'
+      type: movies
+      sublist: toget
+    accept_all: yes
+    set:
+      title: "{{anidb_name|re_replace('[/-]', ' ')|re_replace('[;:`´()]', '')}}"
+    list_add:
+      - entry_list: anidb-movies
 
 
 ##### Download episodes from manually downloaded torrents
