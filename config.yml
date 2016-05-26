@@ -393,6 +393,26 @@ tasks:
         - search_rss: https://kickass.unblocked.la/usearch/{{search_term}}/?rss=1
 
 
+##### Download anime from manually downloaded torrents
+#
+  download-anime-manual:
+    priority: 15
+    template:
+      - disable-seen-retry
+      - transmission
+      - transmission-anime
+      - pushbullet
+    filesystem:
+      path: '/{{secrets.folder.root}}{{secrets.folder.downanime}}'
+      mask: '*.torrent'
+    parsing:
+      series: guessit
+    accept_all: yes
+    exec:
+      on_output:
+        for_accepted: rm -f "{{location}}"
+
+
 ##### Download anime from RSS feed
 #
   download-anime-rss:
