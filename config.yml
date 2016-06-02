@@ -117,7 +117,7 @@ templates:
   pushbullet:
     pushbullet:
       apikey: '{{secrets.pushbullet.api}}'
-      title: "[Flexget] {{task}}"
+      title: "[flexget] {{task}}"
       body: "{{title}}"
 
 ##### Common rejections
