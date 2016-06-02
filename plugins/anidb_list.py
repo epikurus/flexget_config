@@ -52,9 +52,7 @@ class AnidbList(object):
     def on_task_input(self, task, config):
         # Create entries by parsing AniDB wishlist page html using beautifulsoup
         log.verbose('Retrieving AniDB list: mywishlist')
-        mode = sublists.get("all")
-        if config['sublist'] and config['sublist'].lower() in sublists:
-            mode = sublists.get(config['sublist'])
+        mode = sublists.get(config['sublist'])
         url = 'http://anidb.net/perl-bin/animedb.pl?show=mywishlist&uid=%s&mode=%d' % (config['user_id'], mode)
         log.debug('Requesting: %s' % url)
 
