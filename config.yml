@@ -452,7 +452,7 @@ tasks:
             filter: all
 
 
-##### Remove manually movies downloaded from the movie queue and trakt list
+##### Remove manually downloaded movies from the movie queue and trakt list
 #
   clean-movie-queue:
     priority: 22
@@ -504,6 +504,7 @@ tasks:
       on_output:
         for_accepted: rm -f "{{location}}"
     list_remove:
+      - movie_list: trakt-movies
       - trakt_list:
           account: '{{secrets.trakt.account}}'
           list: '{{secrets.trakt.movies}}'
