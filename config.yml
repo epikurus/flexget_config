@@ -623,13 +623,14 @@ tasks:
     move:
       to: "/{{secrets.folder.root}}{{secrets.folder.anime}}{{series_name|default(title)|pathscrub}}/"
       clean_source: 100
-### REMOVE THE LINES BELOW IF YOU DONT WANT TO RENAME ANIME WITH THE EXTERNAL SCRIPT
     exec:
+      on_exit:
+        for_accepted: find '/{{secrets.folder.root}}{{secrets.folder.downanime}}'* -type d -empty -delete
+### REMOVE THE LINES BELOW IF YOU DONT WANT TO RENAME ANIME WITH THE EXTERNAL SCRIPT
+        phase: '{{secrets.script.animerenamer}}'
       on_output:
         for_accepted: echo "{{output}}" >> '{{secrets.list.animerename}}'
-      on_exit:
-        phase: '{{secrets.script.animerenamer}}'
-        for_accepted: find '/{{secrets.folder.root}}{{secrets.folder.downanime}}'* -type d -empty -delete
+
 
 ##### Move movies from downloads folder to the movies folder, along with possible subtitles and adding the files to the subtitle queue
 #
