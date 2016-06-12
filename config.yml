@@ -708,20 +708,14 @@ tasks:
     template:
       - disable-seen-retry
       - series-metainfo
-    plugin_priority:
-      if: -251
-      manipulate: -252
-      list_add: -253
     filesystem:
       path: '/{{secrets.folder.root}}{{secrets.folder.series}}'
-      recursive: yes
-      retrieve: files
-      regexp: '.*\.(avi|mkv|mp4)$'
+      retrieve: dirs
     manipulate:
-      - series_season:
-          remove: yes
-      - series_episode:
-          remove: yes
+      - title:
+          replace:
+            regexp: '$'
+            format: ' S01E01'
     accept_all: yes
     if:
       - tvdb_status == 'Ended': reject
@@ -729,6 +723,7 @@ tasks:
       - trakt_list:
           account: '{{secrets.trakt.account}}'
           list: '{{secrets.trakt.series}}'
+          type: shows
 
 
 ##### Clean the series that already ended from trakt series list
