@@ -143,7 +143,7 @@ templates:
 #
   torrents:
     torrent_alive:
-      min_seeds: 10
+      min_seeds: 3
       reject_for: 15 minutes
     magnets: no
     # Might need to disable if you are getting errors connecting to https sources
@@ -597,7 +597,7 @@ tasks:
         - sub
         - en.srt
         - en.sub
-      clean_source: 100
+      clean_source: 50
     subtitle_queue:
       action: add
       path: "{{output}}"
@@ -623,7 +623,7 @@ tasks:
     accept_all: yes
     move:
       to: "/{{secrets.folder.root}}{{secrets.folder.anime}}{{series_name|default(title)|pathscrub}}/"
-      clean_source: 100
+      clean_source: 50
     exec:
       on_exit:
         for_accepted: find '/{{secrets.folder.root}}{{secrets.folder.downanime}}'* -type d -empty -delete
