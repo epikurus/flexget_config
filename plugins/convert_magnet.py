@@ -66,7 +66,7 @@ class ConvertMagnet(object):
             raise plugin.DependencyError('convert_magnet', 'libtorrent', 'libtorrent package required', log)
 
     @plugin.priority(130)
-    def on_task_urlrewrite(self, task, config):
+    def on_task_download(self, task, config):
         if config is False:
             return
         # Create the conversion target directory
@@ -94,7 +94,8 @@ class ConvertMagnet(object):
                     torrent_file = '/' + torrent_file
                 entry['url'] = torrent_file
                 entry['file'] = torrent_file
-                entry['urls'].append('file://{}'.format(torrent_file))
+		# make sure it's first in the list because of how download plugin works
+                entry['urls'].insert(0, 'file://{}'.format(torrent_file))
 
 
 @event('plugin.register')
