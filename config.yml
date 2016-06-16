@@ -164,25 +164,19 @@ templates:
       password: '{{secrets.transmission.pass}}'
       main_file_only: yes
       include_subs: yes
-      skip_files:
-        - '*.nfo'
-        - '*.sfv'
-        - '*.txt'
-        - '*[sS]ample*'
-        - '*[tT]railer*'
 
 ##### Transmission series config
 #
   transmission-series:
     transmission:
-      content_filename: "{{tvdb_series_name|default(series_name)|pathscrub}} - {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %}: - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %}: - [{{quality}}]{% endif %}"
+      content_filename: "{{tvdb_series_name|default(series_name)|pathscrub}} - {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %} - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %} - [{{quality}}]{% endif %}"
       path: "/{{secrets.folder.root}}{{secrets.folder.downseries}}{{tvdb_series_name|default(series_name)|pathscrub}}/"
 
 ##### Transmission movies config
 #
   transmission-movies:
     transmission:
-      content_filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %}: - [{{quality}}]{% endif %}"
+      content_filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %} - [{{quality}}]{% endif %}"
       path: "/{{secrets.folder.root}}{{secrets.folder.downmovies}}{{movie_name|pathscrub}}"
 
 ##### Transmission anime config
@@ -205,9 +199,12 @@ templates:
   series-metainfo:
     metainfo_series: yes
     thetvdb_lookup: yes
-# might be needed for some series, but causes issues with "name (year)" based series, like scandal
-#    parsing:
-#      series: guessit
+
+##### Guessit parsing for some series tasks and anime, not applied to all tasks because it causes issues with "name (year)" based series, like scandal
+#
+  series-guessit:
+    parsing:
+      series: guessit
 
 ##### Movies metainfo mainly for move and update tasks
 #
@@ -337,14 +334,13 @@ tasks:
     template:
       - disable-seen-retry
       - series-metainfo
+      - series-guessit
       - transmission
       - transmission-series
       - pushbullet
     filesystem:
       path: '/{{secrets.folder.root}}{{secrets.folder.downseries}}'
       mask: '*.torrent'
-    parsing:
-      series: guessit
     accept_all: yes
     exec:
       on_output:
@@ -399,14 +395,13 @@ tasks:
     priority: 15
     template:
       - disable-seen-retry
+      - series-guessit
       - transmission
       - transmission-anime
       - pushbullet
     filesystem:
       path: '/{{secrets.folder.root}}{{secrets.folder.downanime}}'
       mask: '*.torrent'
-    parsing:
-      series: guessit
     accept_all: yes
     exec:
       on_output:
@@ -585,13 +580,9 @@ tasks:
       retrieve: files
       regexp: '.*\.(avi|mkv|mp4)$'
     accept_all: yes
-    regexp:
-      reject:
-        - \btrailer\b
-        - \bsample\b
     move:
       to: "/{{secrets.folder.root}}{{secrets.folder.series}}{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}}/"
-      filename: "{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}} - {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %}: - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %}: - [{{quality}}]{% endif %}"
+      filename: "{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}} - {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %} - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %} - [{{quality}}]{% endif %}"
       along:
         - srt
         - sub
@@ -612,13 +603,12 @@ tasks:
     priority: 32
     template:
       - disable-seen-retry
+      - series-guessit
     filesystem:
       path: '/{{secrets.folder.root}}{{secrets.folder.downanime}}'
       recursive: yes
       retrieve: files
       regexp: '.*\.(avi|mkv|mp4)$'
-    parsing:
-      series: guessit
     metainfo_series: yes
     accept_all: yes
     move:
@@ -652,7 +642,7 @@ tasks:
         - \bsample\b
     move:
       to: '/{{secrets.folder.root}}{{secrets.folder.movies}}'
-      filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %}: - [{{quality}}]{% endif %}"
+      filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %} - [{{quality}}]{% endif %}"
       along:
         - srt
         - sub
