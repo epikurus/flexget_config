@@ -3,7 +3,7 @@ schedules:
   - tasks: ['populate-*', 'clean-*', 'update-*']
     schedule:
       hour: 0
-  - tasks: ['purge-*', 'fill-*', '*-rss']
+  - tasks: ['purge-*', 'fill-*', '*-rss', '*-magnets']
     schedule:
       minute: 0,30
   - tasks: ['*-discover', '*-manual']
@@ -368,10 +368,29 @@ tasks:
           all_entries: yes
 
 
+##### Download episodes from RSS magnets feeds, as a fallback from the previous task
+#
+  download-series-magnets:
+    priority: 13
+    template:
+      - series
+      - reject
+      - torrents
+      - transmission
+      - transmission-series
+      - pushbullet
+    magnets: yes
+    convert_magnet: yes
+    inputs:
+      - rss:
+          url: http://showrss.info/feeds/all.rss
+          all_entries: yes
+
+
 ##### Discover and download older episodes and pilots from recently added series
 #
   download-series-discover:
-    priority: 13
+    priority: 14
     template:
       - series
       - reject
