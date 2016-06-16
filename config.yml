@@ -164,6 +164,7 @@ templates:
       password: '{{secrets.transmission.pass}}'
       main_file_only: yes
       include_subs: yes
+      rename_like_files: yes
 
 ##### Transmission series config
 #
