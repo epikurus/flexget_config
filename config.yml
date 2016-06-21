@@ -609,9 +609,11 @@ tasks:
         - en.srt
         - en.sub
       clean_source: 50
-    subtitle_queue:
-      action: add
-      path: "{{output}}"
+    list_add:
+      - subtitle_list:
+          list: subtitles
+          path: "{{output}}"
+          remove_after: 7 days
     exec:
       on_exit:
         for_accepted: find '/{{secrets.folder.root}}{{secrets.folder.downseries}}'* -type d -empty -delete
@@ -669,9 +671,11 @@ tasks:
         - en.srt
         - en.sub
       clean_source: 100
-    subtitle_queue:
-      action: add
-      path: "{{output}}"
+    list_add:
+      - subtitle_list:
+          list: subtitles
+          path: "{{output}}"
+          remove_after: 7 days
     exec:
       on_exit:
         for_accepted: find '/{{secrets.folder.root}}{{secrets.folder.downmovies}}'* -type d -empty -delete
@@ -684,18 +688,15 @@ tasks:
     priority: 35
     template:
       - disable-seen-retry
-    subtitle_queue: emit
-    accept_all: yes
+    subtitle_list:
+      list: subtitles
+    list_queue:
+      - subtitle_list:
+          list: subtitles
     subliminal:
       exact_match: yes
       languages:
         - eng
-      providers:
-        - opensubtitles
-        - addic7ed
-        - podnapisi
-        - thesubdb
-        - tvsubtitles
 
 
 ##### Clean finished torrents from transmission
