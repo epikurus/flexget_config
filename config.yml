@@ -402,7 +402,7 @@ tasks:
       release_estimations: ignore
       interval: 15 minutes
       what:
-        - emit_series:
+        - next_series_episodes:
             from_start: yes
       from:
         - torrentz: good
@@ -458,7 +458,7 @@ tasks:
       release_estimations: ignore
       interval: 15 minutes
       what:
-        - emit_series:
+        - next_series_episodes:
             from_start: yes
             backfill: yes
       from:
@@ -547,8 +547,9 @@ tasks:
       from:
         - torrentz: good
         - search_rss: https://kickass.unblocked.la/usearch/{{search_term}}/?rss=1
-    list_queue:
-      - movie_list: trakt-movies
+    list_match:
+      from:
+        - movie_list: trakt-movies
     list_remove:
       - trakt_list:
           account: '{{secrets.trakt.account}}'
@@ -579,8 +580,9 @@ tasks:
         - search_rss: https://kickass.unblocked.la/usearch/{{search_term}}/?rss=1
     if:
       - tmdb_year > now.year - 1: reject
-    list_queue:
-      - movie_list: trakt-movies
+    list_match:
+      from:
+        - movie_list: trakt-movies
     list_remove:
       - trakt_list:
           account: '{{secrets.trakt.account}}'
@@ -690,9 +692,10 @@ tasks:
       - disable-seen-retry
     subtitle_list:
       list: subtitles
-    list_queue:
-      - subtitle_list:
-          list: subtitles
+    list_match:
+      from:
+        - subtitle_list:
+            list: subtitles
     subliminal:
       exact_match: yes
       languages:
