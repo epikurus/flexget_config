@@ -3,6 +3,7 @@ import logging
 
 from flexget import plugin
 from flexget.event import event
+from past.builtins import basestring
 
 log = logging.getLogger('logfilter')
 
