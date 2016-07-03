@@ -42,10 +42,25 @@ Installation
 
 * Clone this repository's contents into ~/.flexget
 * Authenticate flexget with trakt: http://flexget.com/wiki/Plugins/trakt
+* Create the folder structure according to example below (names inside brackets represent the secrets variable for next step)
 * Rename secrets.yml.sample to secrets.yml and change the fields inside according to your accounts and system
 * Create the trakt.tv lists accordingly
-* Change the transmission port in the config.yml, in both the transmission template and the clean-transmission task
+* Change the transmission port in config.yml (under transmission-settings)
 * Alternative names, quality, begin episode and other series settings can be defined directly with the series plugin in the series.yml and anime.yml files, as shown in the sample files
 * If you dont use any of the above files, you need to comment the respective includes (and possibly the templates) in config.yml
 * If you plan on using the anime rename script, you will need to install and configure [kiara](https://github.com/jonybat/kiara/) and create the anime rename list file. If not just remove the lines marked in the move-anime task
 * Finally, add the necessary files to configure flexget as a service (daemon). See: http://flexget.com/wiki/Daemon/Startup
+
+
+Folder structure:
+----------------
+```
+/mount/media                      (root)
+............/downloads
+....................../series     (downseries)
+....................../anime      (downanime)
+....................../movies     (downmovies)
+............/series               (series)
+............/anime                (anime)
+............/movies               (movies)
+```
