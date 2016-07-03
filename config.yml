@@ -14,44 +14,6 @@ schedules:
       minute: 15,45
 
 templates:
-  global:
-    no_entries_ok: yes
-    pathscrub: windows
-    free_space:
-      path: '/{{secrets.folder.root}}'
-      space: 5000
-    # Requires log_filter plugin
-    log_filter:
-      task:
-        - marked seen
-        - because quality already downloaded
-        - because episode has already been downloaded
-        - Task does not have any
-      move:
-        - left because it exceeds safety value
-        - does not exists (anymore)
-      urlrewriter:
-        - URL rewritten to
-      enzyme.mkv:
-        - Reading
-        - Processing
-      enzyme.parsers.ebml.core:
-        - ignored
-        - Maximum level
-      subliminal.video:
-        - Scanning video
-      parser_internal:
-        - appears to be an episode pack
-      content_size:
-        - rejecting
-      search_rss:
-        - Error
-      assume_quality:
-        - ""
-      utils.requests:
-        - Waiting
-      anidb_list:
-        - Entry does not match
 
 ##### Series config
 #
@@ -112,13 +74,14 @@ templates:
       min: 500
       max: 3000
 
-##### Pushbullet config
+##### Transmission config
 #
-  pushbullet:
-    pushbullet:
-      apikey: '{{secrets.pushbullet.api}}'
-      title: "[flexget] {{task}}"
-      body: "{{title}}"
+  transmission-anchors:
+    _transmission-settings: &transmission-settings
+      host: '{{secrets.transmission.host}}'
+      port: 9091
+      username: '{{secrets.transmission.user}}'
+      password: '{{secrets.transmission.pass}}'
 
 ##### Common rejections
 #
@@ -139,6 +102,50 @@ templates:
         - '*.rar'
         - '*.zip'
 
+
+##### ADVANCED SETTINGS #####
+
+##### Global config
+#
+  global:
+    no_entries_ok: yes
+    pathscrub: windows
+    free_space:
+      path: '/{{secrets.folder.root}}'
+      space: 5000
+    # Requires log_filter plugin
+    log_filter:
+      task:
+        - marked seen
+        - because quality already downloaded
+        - because episode has already been downloaded
+        - Task does not have any
+      move:
+        - left because it exceeds safety value
+        - does not exists (anymore)
+      urlrewriter:
+        - URL rewritten to
+      enzyme.mkv:
+        - Reading
+        - Processing
+      enzyme.parsers.ebml.core:
+        - ignored
+        - Maximum level
+      subliminal.video:
+        - Scanning video
+      parser_internal:
+        - appears to be an episode pack
+      content_size:
+        - rejecting
+      search_rss:
+        - Error
+      assume_quality:
+        - ""
+      utils.requests:
+        - Waiting
+      anidb_list:
+        - Entry does not match
+
 ##### Common torrents config
 #
   torrents:
@@ -156,36 +163,42 @@ templates:
 
 ##### Transmission series config
 #
-  transmission:
+  transmission-series:
     transmission:
-      host: '{{secrets.transmission.host}}'
-      port: 9091
-      username: '{{secrets.transmission.user}}'
-      password: '{{secrets.transmission.pass}}'
+      <<: *transmission-settings
       main_file_only: yes
       include_subs: yes
       rename_like_files: yes
-
-##### Transmission series config
-#
-  transmission-series:
-    transmission:
       content_filename: "{{tvdb_series_name|default(series_name)|pathscrub}} - {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %} - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %} - [{{quality}}]{% endif %}"
       path: "/{{secrets.folder.root}}{{secrets.folder.downseries}}{{tvdb_series_name|default(series_name)|pathscrub}}/"
-
-##### Transmission movies config
-#
-  transmission-movies:
-    transmission:
-      content_filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %} - [{{quality}}]{% endif %}"
-      path: "/{{secrets.folder.root}}{{secrets.folder.downmovies}}{{movie_name|pathscrub}}"
 
 ##### Transmission anime config
 #
   transmission-anime:
     transmission:
+      <<: *transmission-settings
+      main_file_only: yes
       content_filename: "{{series_name}} - ep{{series_id}} - [{{quality}}]"
       path: "/{{secrets.folder.root}}{{secrets.folder.downanime}}{{series_name|pathscrub}}/"
+
+##### Transmission movies config
+#
+  transmission-movies:
+    transmission:
+      <<: *transmission-settings
+      main_file_only: yes
+      include_subs: yes
+      rename_like_files: yes
+      content_filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %} - [{{quality}}]{% endif %}"
+      path: "/{{secrets.folder.root}}{{secrets.folder.downmovies}}{{movie_name|pathscrub}}"
+
+##### Pushbullet config
+#
+  pushbullet:
+    pushbullet:
+      apikey: '{{secrets.pushbullet.api}}'
+      title: "[flexget] {{task}}"
+      body: "{{title}}"
 
 ##### Disable builtins for some tasks
 #
@@ -213,6 +226,7 @@ templates:
     tmdb_lookup: yes
     parsing:
       movie: guessit
+
 
 tasks:
 
@@ -336,7 +350,6 @@ tasks:
       - disable-seen-retry
       - series-metainfo
       - series-guessit
-      - transmission
       - transmission-series
       - pushbullet
     filesystem:
@@ -356,7 +369,6 @@ tasks:
       - series
       - reject
       - torrents
-      - transmission
       - transmission-series
       - pushbullet
     inputs:
@@ -376,7 +388,6 @@ tasks:
       - series
       - reject
       - torrents
-      - transmission
       - transmission-series
       - pushbullet
     magnets: yes
@@ -395,7 +406,6 @@ tasks:
       - series
       - reject
       - torrents
-      - transmission
       - transmission-series
       - pushbullet
     discover:
@@ -416,7 +426,6 @@ tasks:
     template:
       - disable-seen-retry
       - series-guessit
-      - transmission
       - transmission-anime
       - pushbullet
     filesystem:
@@ -435,7 +444,6 @@ tasks:
     template:
       - anime
       - torrents
-      - transmission
       - transmission-anime
       - pushbullet
     inputs:
@@ -451,7 +459,6 @@ tasks:
     template:
       - anime
       - torrents
-      - transmission
       - transmission-anime
       - pushbullet
     discover:
@@ -508,7 +515,6 @@ tasks:
     template:
       - disable-seen-retry
       - movies-metainfo
-      - transmission
       - transmission-movies
       - pushbullet
     filesystem:
@@ -533,7 +539,6 @@ tasks:
       - movies-1080p
       - reject
       - torrents
-      - transmission
       - transmission-movies
       - pushbullet
     exists_movie:
@@ -564,7 +569,6 @@ tasks:
       - movies-720p
       - reject
       - torrents
-      - transmission
       - transmission-movies
       - pushbullet
     exists_movie:
@@ -685,7 +689,6 @@ tasks:
 
 ##### Download subtitles for the previously queued files
 #
-# Might have issues until final release of subliminal 2.0, see: http://discuss.flexget.com/t/subliminal-error/2023/
   download-subtitles:
     priority: 35
     template:
@@ -708,10 +711,7 @@ tasks:
     priority: 37
     disable: details
     clean_transmission:
-      host: '{{secrets.transmission.host}}'
-      port: 9091
-      username: '{{secrets.transmission.user}}'
-      password: '{{secrets.transmission.pass}}'
+      <<: *transmission-settings
       finished_for: 1 day
 
 
