@@ -157,8 +157,8 @@ templates:
     # Can remove if you upgrade to python 2.7.9+ or install requests[security]
     #verify_ssl_certificates: no
     domain_delay:
-      torrentz.eu: 1 seconds
-      unblocked.la: 1 seconds
+      thepiratebay.se: 1 seconds
+      extratorrent.cc: 1 seconds
       nyaa.se: 1 seconds
 
 ##### Transmission series config
@@ -376,9 +376,9 @@ tasks:
       - transmission-series
       - pushbullet
     inputs:
-      - rss:
-          url: http://torrentz.eu/feedA?good&q=tv
-          all_entries: yes
+      - rss: https://eztv.unblocked.live/ezrss.xml
+      - rss: https://extratorrent.cc/rss.xml?cid=8&type=last
+      - rss: https://www.torrentfunk.com/tv/rss.xml
 
 
 ##### Download episodes from RSS magnets feeds, as a fallback from the previous task
@@ -416,7 +416,8 @@ tasks:
         - next_series_episodes:
             from_start: yes
       from:
-        - torrentz: good
+        - piratebay:
+            category: highres tv
 
 
 ##### Download anime from manually downloaded torrents
@@ -550,7 +551,10 @@ tasks:
       what:
         - movie_list: trakt-movies
       from:
-        - torrentz: good
+        - piratebay:
+            category: highres movies
+        - extratorrent:
+            category: movies
     list_match:
       from:
         - movie_list: trakt-movies
@@ -579,7 +583,10 @@ tasks:
       what:
         - movie_list: trakt-movies
       from:
-        - torrentz: good
+        - piratebay:
+            category: highres movies
+        - extratorrent:
+            category: movies
     if:
       - tmdb_year > now.year - 1: reject
     list_match:
@@ -607,11 +614,11 @@ tasks:
     move:
       to: "/{{secrets.folder.root}}{{secrets.folder.series}}{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}}/"
       filename: "{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}} - {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %} - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %} - [{{quality}}]{% endif %}"
-      along:
-        - srt
-        - sub
-        - en.srt
-        - en.sub
+#      along:
+#        - srt
+#        - sub
+#        - en.srt
+#        - en.sub
       clean_source: 50
     list_add:
       - subtitle_list:
@@ -669,11 +676,11 @@ tasks:
     move:
       to: '/{{secrets.folder.root}}{{secrets.folder.movies}}'
       filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %} - [{{quality}}]{% endif %}"
-      along:
-        - srt
-        - sub
-        - en.srt
-        - en.sub
+#      along:
+#        - srt
+#        - sub
+#        - en.srt
+#        - en.sub
       clean_source: 100
     list_add:
       - subtitle_list:
