@@ -21,13 +21,9 @@ class mal(object):
             'user_id': {
                 'type': 'string'
             },
-            'strip_dates': {
-                'type': 'boolean',
-                'default': False
-            },
             'list': {
                 'type': 'string',
-                'enum': ['watching', 'plan_to_watch', 'both'],
+                'enum': ['watching', 'plantowatch', 'both'],
                                 'default': 'both'
             }
         }
@@ -63,7 +59,7 @@ class mal(object):
       entries = []
       if config['list'] == ['watching'] or config['list'] == 'both':
         entries = entries + get_anime(task, url + "?status=1")
-      if config['list'] == ['watching'] or config['list'] == 'both':
+      if config['list'] == ['plantowatch'] or config['list'] == 'both':
         entries = entries + get_anime(task, url + "?status=6")
 
       return entries
