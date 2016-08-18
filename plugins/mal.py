@@ -47,6 +47,7 @@ class mal(object):
           entry = Entry()
 
           entry["title"] = a.find("span").text
+          entry["mal_name"] = entry["title"]
           entry["url"] = "http://myanimelist.net" + a["href"]
           entries.append(entry)
 
