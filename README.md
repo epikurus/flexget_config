@@ -9,7 +9,7 @@ It currently does the following (ideally by this order):
 * Looks on the series download folder for .torrent files and adds them to transmission
 * Looks for series on RSS feeds and downloads them
 * Discovers and downloads series that don't have any download history or are missing (with a set interval because it should not happen often)
-* Does the previous tasks, but this time for anime series and movies, using anidb as a list source instead
+* Does the previous tasks, but this time for anime, using myanimelist as a list source instead
 * Looks for movies in the drive and removes them from both the movie queue and the trakt list (this has a similar effect to the populate task for series db)
 * Fills the movie queue with the movies in the trakt list
 * Looks on the movies download folder for .torrent files and adds them to transmission
