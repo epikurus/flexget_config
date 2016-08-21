@@ -298,7 +298,7 @@ tasks:
       list: both
     accept_all: yes
     set:
-      title: "{{myanimelist_name|re_replace('[-/:;](?=[a-zA-Z0-9])', ' ')|re_replace('[-/:;](?![a-zA-Z0-9])|[`´()]', '')}}"
+      title: "{{myanimelist_name|re_replace('[-/:;.★](?=[a-zA-Z])', ' ')|re_replace('[:;](?![a-zA-Z])|[`´()]|TV|', '')|re_replace('Season ', 'S')|re_replace('  +', ' ')}}"
     list_add:
       - entry_list: myanimelist-series
 
