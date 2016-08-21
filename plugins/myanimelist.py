@@ -10,10 +10,10 @@ from flexget.utils.cached_input import cached
 from flexget.entry import Entry
 from flexget.utils.soup import get_soup
 
-log = logging.getLogger('mal')
+log = logging.getLogger('myanimelist')
 
 
-class mal(object):
+class myanimelist(object):
     """"Creates an entry for each movie or series in your MAL Plan to Watch and/or Watching lists."""
 
     schema = {
@@ -31,7 +31,7 @@ class mal(object):
 
 
 
-    @cached('mal', persist='2 hours')
+    @cached('myanimelist', persist='2 hours')
     def on_task_input(self, task, config):
 
       def get_anime(task, url):
@@ -47,6 +47,7 @@ class mal(object):
           entry = Entry()
 
           entry["title"] = a.find("span").text
+          entry["myanimelist_name"] = entry["title"]
           entry["url"] = "http://myanimelist.net" + a["href"]
           entries.append(entry)
 
@@ -67,6 +68,6 @@ class mal(object):
 
 @event('plugin.register')
 def register_plugin():
-    plugin.register(mal, 'mal', api_ver=2, groups=['list'])
+    plugin.register(myanimelist, 'myanimelist', api_ver=2, groups=['list'])
 
 
