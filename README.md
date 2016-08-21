@@ -21,7 +21,7 @@ It currently does the following (ideally by this order):
 * Updates the trakt series list from the series in the library, meaning that manually downloaded series will be part of flexget's series search, with the exception of when the tv show has already ended (with an interval of 1 day, because it should not happen often)
 * Finally, it will look if all the series currently in the trakt series list are still running, or have been canceled/ended, and if so, remove them from that list (with a big interval to avoid false positives)
 
-As sources for both tv shows and movies it uses torrentz and kat, and nyaa for anime.
+It parses multiple RSS feeds for tv shows, searches thepiratebay for movies and missing tv shows, and nyaa for anime.
 
 It also has Pushbullet notifications for all downloads and ended/canceled series, and the log_filter plugin (by [tarzasai](https://github.com/tarzasai/.flexget)) to filter some log messages that are unnecessary.
 
