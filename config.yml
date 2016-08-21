@@ -293,12 +293,12 @@ tasks:
     template:
       - disable-seen-retry
       - series-metainfo
-    mal:
+    myanimelist:
       user_id: '{{secrets.myanimelist.id}}'
       list: both
     accept_all: yes
     set:
-      title: "{{title|re_replace('[/-:]', ' ')|re_replace('[;`´()]', '')}}"
+      title: "{{myanimelist_name|re_replace('[/-:]', ' ')|re_replace('[;`´()]', '')}}"
     list_add:
       - entry_list: myanimelist-series
 
