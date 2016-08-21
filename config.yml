@@ -43,18 +43,12 @@ templates:
     sequence:
       - configure_series:
           from:
-            entry_list: anidb-series
+            entry_list: myanimelist-series
           settings:
             identified_by: sequence
             quality: 720p !10bit !h265
             special_ids:
               - OVA
-      - configure_series:
-          from:
-            entry_list: anidb-movies
-          settings:
-            identified_by: sequence
-            quality: 720p+ !10bit !h265
 
 ##### Movies config
 #
@@ -143,8 +137,6 @@ templates:
         - ""
       utils.requests:
         - Waiting
-      anidb_list:
-        - Entry does not match
 
 ##### Common torrents config
 #
@@ -282,68 +274,33 @@ tasks:
       - entry_list: trakt-series
 
 
-##### Purge the series list to allow full sync with anidb series list
+##### Purge the series list to allow full sync with myanimelist series list
 #
   purge-anime-series-list:
     priority: 6
     template:
       - disable-seen-retry
-    entry_list: anidb-series
+    entry_list: myanimelist-series
     accept_all: yes
     list_remove:
-      - entry_list: anidb-series
+      - entry_list: myanimelist-series
 
 
-##### Purge the series list to allow full sync with anidb movies list
-#
-  purge-anime-movies-list:
-    priority: 7
-    template:
-      - disable-seen-retry
-    entry_list: anidb-movies
-    accept_all: yes
-    list_remove:
-      - entry_list: anidb-movies
-
-
-##### Fetch, format and output anidb series list to a custom entry list
+##### Fetch, format and output myanimelist series list to a custom entry list
 #
   fill-anime-series-list:
     priority: 8
     template:
       - disable-seen-retry
       - series-metainfo
-    headers:
-      User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"
-    anidb_list:
-      user_id: '{{secrets.anidb.id}}'
-      type: shows
-      sublist: toget
+    mal:
+      user_id: '{{secrets.myanimelist.id}}'
+      list: both
     accept_all: yes
     set:
-      title: "{{anidb_name|re_replace('[/-]', ' ')|re_replace('[;:`´()]', '')}}"
+      title: "{{title|re_replace('[/-:]', ' ')|re_replace('[;`´()]', '')}}"
     list_add:
-      - entry_list: anidb-series
-
-
-##### Fetch, format and output anidb movies list to a custom entry list
-#
-  fill-anime-movies-list:
-    priority: 9
-    template:
-      - disable-seen-retry
-      - series-metainfo
-    headers:
-      User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"
-    anidb_list:
-      user_id: '{{secrets.anidb.id}}'
-      type: movies
-      sublist: toget
-    accept_all: yes
-    set:
-      title: "{{anidb_name|re_replace('[/-]', ' ')|re_replace('[;:`´()]', '')}}"
-    list_add:
-      - entry_list: anidb-movies
+      - entry_list: myanimelist-series
 
 
 ##### Download episodes from manually downloaded torrents
