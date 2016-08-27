@@ -40,15 +40,14 @@ templates:
 #
   anime:
     include: anime.yml
-    sequence:
-      - configure_series:
-          from:
-            entry_list: myanimelist-series
-          settings:
-            identified_by: sequence
-            quality: 720p !10bit !h265
-            special_ids:
-              - OVA
+    configure_series:
+      from:
+        entry_list: myanimelist-series
+      settings:
+        identified_by: sequence
+        quality: 720p !10bit !h265
+        special_ids:
+          - OVA
 
 ##### Movies config
 #
