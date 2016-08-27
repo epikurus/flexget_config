@@ -503,7 +503,7 @@ tasks:
       - '/{{secrets.folder.root}}{{secrets.folder.downmovies}}'
       - '/{{secrets.folder.root}}{{secrets.folder.movies}}'
     discover:
-      release_estimations: ignore
+      release_estimations: loose
       interval: 15 minutes
       what:
         - movie_list: trakt-movies
@@ -535,7 +535,7 @@ tasks:
       - '/{{secrets.folder.root}}{{secrets.folder.downmovies}}'
       - '/{{secrets.folder.root}}{{secrets.folder.movies}}'
     discover:
-      release_estimations: ignore
+      release_estimations: loose
       interval: 15 minutes
       what:
         - movie_list: trakt-movies
