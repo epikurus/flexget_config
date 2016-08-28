@@ -449,6 +449,7 @@ tasks:
       - trakt_list:
           account: '{{secrets.trakt.account}}'
           list: '{{secrets.trakt.movies}}'
+          type: movies
 
 
 ##### Fill the movie queue with movies from trakt list
@@ -486,6 +487,7 @@ tasks:
       - trakt_list:
           account: '{{secrets.trakt.account}}'
           list: '{{secrets.trakt.movies}}'
+          type: movies
 
 
 ##### Discover and download 1080p movies
@@ -518,6 +520,7 @@ tasks:
       - trakt_list:
           account: '{{secrets.trakt.account}}'
           list: '{{secrets.trakt.movies}}'
+          type: movies
 
 
 ##### Discover and download 720p movies, if the movie is not recent
@@ -552,6 +555,7 @@ tasks:
       - trakt_list:
           account: '{{secrets.trakt.account}}'
           list: '{{secrets.trakt.movies}}'
+          type: movies
 
 
 ##### Move series from downloads folder to respective folders, along with existing subtitles and adding the files to the subtitle queue
@@ -722,3 +726,4 @@ tasks:
       - trakt_list:
           account: '{{secrets.trakt.account}}'
           list: '{{secrets.trakt.series}}'
+          type: shows
