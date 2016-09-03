@@ -614,7 +614,7 @@ tasks:
         phase:
           - find '/{{secrets.folder.root}}{{secrets.folder.downanime}}'* -type d -empty -delete
 ### REMOVE THE LINES BELOW IF YOU DONT WANT TO RENAME ANIME WITH THE EXTERNAL SCRIPT
-          - '{{secrets.script.animerenamer}}' &
+          - '{{secrets.script.animerenamer}}'
       on_output:
         for_accepted: echo "{{location}}" >> '{{secrets.list.animerename}}'
 
