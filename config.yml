@@ -405,7 +405,7 @@ tasks:
       - pushbullet
     inputs:
       - rss:
-          url: http://www.nyaa.se/?page=rss&cats=1_37
+          url: http://www.nyaa.se/?page=rss&cats=1_37&filter=2
           all_entries: yes
 
 
@@ -413,6 +413,45 @@ tasks:
 #
   download-anime-discover:
     priority: 17
+    template:
+      - anime
+      - torrents
+      - transmission-anime
+      - pushbullet
+    discover:
+      release_estimations: ignore
+      interval: 15 minutes
+      what:
+        - next_series_episodes:
+            from_start: yes
+            backfill: yes
+      from:
+        - nyaa:
+            category: anime eng
+            filter: trusted only
+
+
+##### Download anime from RSS feed from all groups
+#
+  download-anime-all-rss:
+    priority: 18
+    delay: 2 hours
+    template:
+      - anime
+      - torrents
+      - transmission-anime
+      - pushbullet
+    inputs:
+      - rss:
+          url: http://www.nyaa.se/?page=rss&cats=1_37
+          all_entries: yes
+
+
+##### Discover and download anime from all groups
+#
+  download-anime-all-discover:
+    priority: 19
+    delay: 2 hours
     template:
       - anime
       - torrents
