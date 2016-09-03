@@ -584,7 +584,7 @@ tasks:
     list_add:
       - subtitle_list:
           list: subtitles
-          path: "{{output}}"
+          path: "{{location}}"
           remove_after: 7 days
     exec:
       on_exit:
@@ -614,7 +614,7 @@ tasks:
 ### REMOVE THE LINES BELOW IF YOU DONT WANT TO RENAME ANIME WITH THE EXTERNAL SCRIPT
         phase: '{{secrets.script.animerenamer}}'
       on_output:
-        for_accepted: echo "{{output}}" >> '{{secrets.list.animerename}}'
+        for_accepted: echo "{{location}}" >> '{{secrets.list.animerename}}'
 
 
 ##### Move movies from downloads folder to the movies folder, along with possible subtitles and adding the files to the subtitle queue
@@ -647,7 +647,7 @@ tasks:
     list_add:
       - subtitle_list:
           list: subtitles
-          path: "{{output}}"
+          path: "{{location}}"
           remove_after: 7 days
     exec:
       on_exit:
