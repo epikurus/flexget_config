@@ -148,9 +148,10 @@ templates:
     # Can remove if you upgrade to python 2.7.9+ or install requests[security]
     #verify_ssl_certificates: no
     domain_delay:
-      thepiratebay.se: 1 seconds
-      extratorrent.cc: 1 seconds
-      nyaa.se: 1 seconds
+      thepiratebay.se: 10 seconds
+      thepiratebay.org: 10 seconds
+      extratorrent.cc: 3 seconds
+      nyaa.se: 3 seconds
 
 ##### Transmission series config
 #
