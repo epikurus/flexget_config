@@ -419,6 +419,7 @@ tasks:
       - torrents
       - transmission-anime
       - pushbullet
+    metainfo_series: yes
     discover:
       release_estimations: ignore
       interval: 15 minutes
@@ -615,7 +616,7 @@ tasks:
       to: "/{{secrets.folder.root}}{{secrets.folder.series}}{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}}/"
       filename: "{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}} - {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %} - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %} - [{{quality}}]{% endif %}"
       along:
-        files:
+        extensions:
           - srt
           - sub
         subdirs:
@@ -680,7 +681,7 @@ tasks:
       to: '/{{secrets.folder.root}}{{secrets.folder.movies}}'
       filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %} - [{{quality}}]{% endif %}"
       along:
-        files:
+        extensions:
           - srt
           - sub
         subdirs:
