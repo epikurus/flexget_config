@@ -150,7 +150,6 @@ templates:
     domain_delay:
       thepiratebay.se: 10 seconds
       thepiratebay.org: 10 seconds
-      extratorrent.cc: 3 seconds
       nyaa.se: 3 seconds
 
 ##### Transmission series config
@@ -333,9 +332,8 @@ tasks:
       - transmission-series
       - pushbullet
     inputs:
-      - rss: https://eztv.unblocked.live/ezrss.xml
-      - rss: https://extratorrent.cc/rss.xml?cid=8&type=last
-      - rss: https://www.torrentfunk.com/tv/rss.xml
+      - rss: https://eztv.ag/ezrss.xml
+      - rss: https://extratorrent.cc/rss.xml?cid=8&type=new
 
 
 ##### Download episodes from RSS magnets feeds, as a fallback from the previous task
