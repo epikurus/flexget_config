@@ -151,6 +151,8 @@ templates:
       thepiratebay.se: 10 seconds
       thepiratebay.org: 10 seconds
       nyaa.se: 3 seconds
+      extratorrent: 3 seconds
+      limetorrents: 3 seconds
 
 ##### Transmission series config
 #
@@ -334,6 +336,7 @@ tasks:
     inputs:
       - rss: https://eztv.ag/ezrss.xml
       - rss: https://extratorrent.cc/rss.xml?cid=8&type=new
+      - rss: https://www.limetorrents.cc/rss/20/
 
 
 ##### Download episodes from RSS magnets feeds, as a fallback from the previous task
@@ -373,6 +376,10 @@ tasks:
       from:
         - piratebay:
             category: highres tv
+        - extratorrent:
+            category: tv
+        - limetorrents:
+            category: tv
 
 
 ##### Download anime from manually downloaded torrents
@@ -552,6 +559,8 @@ tasks:
             category: highres movies
         - extratorrent:
             category: movies
+        - limetorrents:
+            category: movies
     list_match:
       from:
         - movie_list: trakt-movies
@@ -584,6 +593,8 @@ tasks:
         - piratebay:
             category: highres movies
         - extratorrent:
+            category: movies
+        - limetorrents:
             category: movies
     if:
       - tmdb_year > now.year - 1: reject
