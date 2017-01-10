@@ -31,7 +31,7 @@ This was built based on multiple configurations and snippets over the time, with
 Depends:
 --------
 
-* flexget >= 2.6.0
+* flexget >= 2.9.0
 * transmission-daemon
 * transmissionrpc >= 0.11
 * Linux

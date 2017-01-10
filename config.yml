@@ -1,4 +1,4 @@
-secrets: secrets.yml
+variables: secrets.yml
 schedules:
   - tasks: ['populate-*', 'clean-*', 'update-*']
     schedule:
@@ -71,10 +71,10 @@ templates:
 #
   transmission-anchors:
     _transmission-settings: &transmission-settings
-      host: '{{secrets.transmission.host}}'
+      host: "{? transmission.host ?}"
       port: 9091
-      username: '{{secrets.transmission.user}}'
-      password: '{{secrets.transmission.pass}}'
+      username: "{? transmission.user ?}"
+      password: "{? transmission.pass ?}"
 
 ##### Common rejections
 #
@@ -104,7 +104,7 @@ templates:
     no_entries_ok: yes
     pathscrub: windows
     free_space:
-      path: '/{{secrets.folder.root}}'
+      path: "/{? folder.root ?}"
       space: 5000
     # Requires log_filter plugin
     log_filter:
@@ -163,7 +163,7 @@ templates:
       include_subs: yes
       rename_like_files: yes
       content_filename: "{{tvdb_series_name|default(series_name)|pathscrub}} - {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %} - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %} - [{{quality}}]{% endif %}"
-      path: "/{{secrets.folder.root}}{{secrets.folder.downseries}}{{tvdb_series_name|default(series_name)|pathscrub}}/"
+      path: "/{? folder.root ?}{? folder.downseries ?}{{tvdb_series_name|default(series_name)|pathscrub}}/"
 
 ##### Transmission anime config
 #
@@ -172,7 +172,7 @@ templates:
       <<: *transmission-settings
       main_file_only: yes
       content_filename: "{{series_name}} - ep{{series_id}} - [{{quality}}]"
-      path: "/{{secrets.folder.root}}{{secrets.folder.downanime}}{{series_name|pathscrub}}/"
+      path: "/{? folder.root ?}{? folder.downanime ?}{{series_name|pathscrub}}/"
 
 ##### Transmission movies config
 #
@@ -183,15 +183,18 @@ templates:
       include_subs: yes
       rename_like_files: yes
       content_filename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %} - [{{quality}}]{% endif %}"
-      path: "/{{secrets.folder.root}}{{secrets.folder.downmovies}}{{movie_name|pathscrub}}"
+      path: "/{? folder.root ?}{? folder.downmovies ?}{{movie_name|pathscrub}}"
 
 ##### Pushbullet config
 #
   pushbullet:
-    pushbullet:
-      apikey: '{{secrets.pushbullet.api}}'
-      title: "[flexget] {{task}}"
-      body: "{{title}}"
+    notify:
+      entries:
+        title: "[flexget] {{task}}"
+        message: "{{title}}"
+        via:
+          - pushbullet:
+              api_key: "{? pushbullet.api ?}"
 
 ##### Disable builtins for some tasks
 #
@@ -231,7 +234,7 @@ tasks:
       - series-metainfo
     seen: local
     filesystem:
-      path: '/{{secrets.folder.root}}{{secrets.folder.series}}'
+      path: "/{? folder.root ?}{? folder.series ?}"
       recursive: yes
       retrieve: files
       regexp: '.*\.(avi|mkv|mp4)$'
@@ -239,7 +242,7 @@ tasks:
     configure_series:
       from:
         filesystem:
-          path: '/{{secrets.folder.root}}{{secrets.folder.series}}'
+          path: "/{? folder.root ?}{? folder.series ?}"
           retrieve: dirs
       settings:
         tracking: no
@@ -265,8 +268,8 @@ tasks:
       - disable-seen-retry
       - series-metainfo
     trakt_list:
-      account: '{{secrets.trakt.account}}'
-      list: '{{secrets.trakt.series}}'
+      account: "{? trakt.account ?}"
+      list: "{? trakt.series ?}"
       type: shows
     accept_all: yes
     set:
@@ -295,7 +298,7 @@ tasks:
       - disable-seen-retry
       - series-metainfo
     myanimelist:
-      user_id: '{{secrets.myanimelist.id}}'
+      user_id: "{? myanimelist.id ?}"
       list: both
     accept_all: yes
     set:
@@ -315,7 +318,7 @@ tasks:
       - transmission-series
       - pushbullet
     filesystem:
-      path: '/{{secrets.folder.root}}{{secrets.folder.downseries}}'
+      path: "/{? folder.root ?}{? folder.downseries ?}"
       mask: '*.torrent'
     accept_all: yes
     exec:
@@ -392,7 +395,7 @@ tasks:
       - transmission-anime
       - pushbullet
     filesystem:
-      path: '/{{secrets.folder.root}}{{secrets.folder.downanime}}'
+      path: "/{? folder.root ?}{? folder.downanime ?}"
       mask: '*.torrent'
     accept_all: yes
     exec:
@@ -485,7 +488,7 @@ tasks:
       - disable-seen-retry
       - movies-metainfo
     filesystem:
-      path: '/{{secrets.folder.root}}{{secrets.folder.movies}}'
+      path: "/{? folder.root ?}{? folder.movies ?}"
       recursive: yes
       retrieve: files
       regexp: '.*\.(avi|mkv|mp4)$'
@@ -493,8 +496,8 @@ tasks:
     list_remove:
       - movie_list: trakt-movies
       - trakt_list:
-          account: '{{secrets.trakt.account}}'
-          list: '{{secrets.trakt.movies}}'
+          account: "{? trakt.account ?}"
+          list: "{? trakt.movies ?}"
           type: movies
 
 
@@ -503,8 +506,8 @@ tasks:
   fill-movie-queue:
     priority: 23
     trakt_list:
-      account: '{{secrets.trakt.account}}'
-      list: '{{secrets.trakt.movies}}'
+      account: "{? trakt.account ?}"
+      list: "{? trakt.movies ?}"
       type: movies
       strip_dates: yes
     accept_all: yes
@@ -522,7 +525,7 @@ tasks:
       - transmission-movies
       - pushbullet
     filesystem:
-      path: '/{{secrets.folder.root}}{{secrets.folder.downmovies}}'
+      path: "/{? folder.root ?}{? folder.downmovies ?}"
       mask: '*.torrent'
     accept_all: yes
     exec:
@@ -531,8 +534,8 @@ tasks:
     list_remove:
       - movie_list: trakt-movies
       - trakt_list:
-          account: '{{secrets.trakt.account}}'
-          list: '{{secrets.trakt.movies}}'
+          account: "{? trakt.account ?}"
+          list: "{? trakt.movies ?}"
           type: movies
 
 
@@ -547,8 +550,8 @@ tasks:
       - transmission-movies
       - pushbullet
     exists_movie:
-      - '/{{secrets.folder.root}}{{secrets.folder.downmovies}}'
-      - '/{{secrets.folder.root}}{{secrets.folder.movies}}'
+      - "/{? folder.root ?}{? folder.downmovies ?}"
+      - "/{? folder.root ?}{? folder.movies ?}"
     discover:
       release_estimations: loose
       interval: 15 minutes
@@ -566,8 +569,8 @@ tasks:
         - movie_list: trakt-movies
     list_remove:
       - trakt_list:
-          account: '{{secrets.trakt.account}}'
-          list: '{{secrets.trakt.movies}}'
+          account: "{? trakt.account ?}"
+          list: "{? trakt.movies ?}"
           type: movies
 
 
@@ -582,8 +585,8 @@ tasks:
       - transmission-movies
       - pushbullet
     exists_movie:
-      - '/{{secrets.folder.root}}{{secrets.folder.downmovies}}'
-      - '/{{secrets.folder.root}}{{secrets.folder.movies}}'
+      - "/{? folder.root ?}{? folder.downmovies ?}"
+      - "/{? folder.root ?}{? folder.movies ?}"
     discover:
       release_estimations: loose
       interval: 15 minutes
@@ -603,8 +606,8 @@ tasks:
         - movie_list: trakt-movies
     list_remove:
       - trakt_list:
-          account: '{{secrets.trakt.account}}'
-          list: '{{secrets.trakt.movies}}'
+          account: "{? trakt.account ?}"
+          list: "{? trakt.movies ?}"
           type: movies
 
 
@@ -616,13 +619,13 @@ tasks:
       - disable-seen-retry
       - series-metainfo
     filesystem:
-      path: '/{{secrets.folder.root}}{{secrets.folder.downseries}}'
+      path: "/{? folder.root ?}{? folder.downseries ?}"
       recursive: yes
       retrieve: files
       regexp: '.*\.(avi|mkv|mp4)$'
     accept_all: yes
     move:
-      to: "/{{secrets.folder.root}}{{secrets.folder.series}}{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}}/"
+      to: "/{? folder.root ?}{? folder.series ?}{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}}/"
       rename: "{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}} - {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %} - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %} - [{{quality}}]{% endif %}"
       along:
         extensions:
@@ -638,7 +641,7 @@ tasks:
           remove_after: 7 days
     exec:
       on_exit:
-        phase: find '/{{secrets.folder.root}}{{secrets.folder.downseries}}'* -type d -empty -delete
+        phase: find "/{? folder.root ?}{? folder.downseries ?}"* -type d -empty -delete
 
 
 ##### Move anime from downloads folder to respective folders
@@ -649,24 +652,24 @@ tasks:
       - disable-seen-retry
       - series-guessit
     filesystem:
-      path: '/{{secrets.folder.root}}{{secrets.folder.downanime}}'
+      path: "/{? folder.root ?}{? folder.downanime ?}"
       recursive: yes
       retrieve: files
       regexp: '.*\.(avi|mkv|mp4)$'
     metainfo_series: yes
     accept_all: yes
     move:
-      to: "/{{secrets.folder.root}}{{secrets.folder.anime}}{{series_name|default(title)|pathscrub}}/"
+      to: "/{? folder.root ?}{? folder.anime ?}{{series_name|default(title)|pathscrub}}/"
       clean_source: 50
     exec:
       allow_background: yes
       on_exit:
         phase:
-          - find '/{{secrets.folder.root}}{{secrets.folder.downanime}}'* -type d -empty -delete
+          - find "/{? folder.root ?}{? folder.downanime ?}"* -type d -empty -delete
 ### REMOVE THE LINES BELOW IF YOU DONT WANT TO RENAME ANIME WITH THE EXTERNAL SCRIPT
-          - '{{secrets.script.animerenamer}}'
+          - "{? script.animerenamer ?}"
       on_output:
-        for_accepted: echo "{{location}}" >> '{{secrets.list.animerename}}'
+        for_accepted: echo "{{location}}" >> "{? list.animerename ?}"
 
 
 ##### Move movies from downloads folder to the movies folder, along with possible subtitles and adding the files to the subtitle queue
@@ -677,7 +680,7 @@ tasks:
       - disable-seen-retry
       - movies-metainfo
     filesystem:
-      path: '/{{secrets.folder.root}}{{secrets.folder.downmovies}}'
+      path: "/{? folder.root ?}{? folder.downmovies ?}"
       recursive: yes
       retrieve: files
       regexp: '.*\.(avi|mkv|mp4)$'
@@ -687,7 +690,7 @@ tasks:
         - \btrailer\b
         - \bsample\b
     move:
-      to: '/{{secrets.folder.root}}{{secrets.folder.movies}}'
+      to: "/{? folder.root ?}{? folder.movies ?}"
       rename: "{{tmdb_name|pathscrub}} ({{tmdb_year}}){% if quality|default(False) %} - [{{quality}}]{% endif %}"
       along:
         extensions:
@@ -703,7 +706,7 @@ tasks:
           remove_after: 7 days
     exec:
       on_exit:
-        phase: find '/{{secrets.folder.root}}{{secrets.folder.downmovies}}'* -type d -empty -delete
+        phase: find "/{? folder.root ?}{? folder.downmovies ?}"* -type d -empty -delete
 
 
 ##### Download subtitles for the previously queued files
@@ -742,7 +745,7 @@ tasks:
       - disable-seen-retry
       - series-metainfo
     filesystem:
-      path: '/{{secrets.folder.root}}{{secrets.folder.series}}'
+      path: "/{? folder.root ?}{? folder.series ?}"
       retrieve: dirs
     manipulate:
       - title:
@@ -754,8 +757,8 @@ tasks:
       - tvdb_status == 'Ended': reject
     list_add:
       - trakt_list:
-          account: '{{secrets.trakt.account}}'
-          list: '{{secrets.trakt.series}}'
+          account: "{? trakt.account ?}"
+          list: "{? trakt.series ?}"
           type: shows
 
 
@@ -769,13 +772,13 @@ tasks:
       - series-metainfo
       - pushbullet
     trakt_list:
-      account: '{{secrets.trakt.account}}'
-      list: '{{secrets.trakt.series}}'
+      account: "{? trakt.account ?}"
+      list: "{? trakt.series ?}"
       type: shows
     if:
       - tvdb_status == 'Ended': accept
     list_remove:
       - trakt_list:
-          account: '{{secrets.trakt.account}}'
-          list: '{{secrets.trakt.series}}'
+          account: "{? trakt.account ?}"
+          list: "{? trakt.series ?}"
           type: shows
