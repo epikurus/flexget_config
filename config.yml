@@ -49,6 +49,12 @@ templates:
         special_ids:
           - OVA
 
+##### Anime movies config
+#
+  anime-movies:
+    entry_list: myanimelist-movies
+    quality: 720p !10bit !h265
+
 ##### Movies config
 #
   movies-1080p:
@@ -223,6 +229,12 @@ templates:
     parsing:
       movie: guessit
 
+##### Guessit parsing for anime movies task
+#
+  movies-guessit:
+    parsing:
+      movie: guessit
+
 tasks:
 
 ########## SERIES ##########
@@ -371,6 +383,21 @@ tasks:
       - entry_list: myanimelist-series
 
 
+##### Fill the movie queue with movies from trakt list
+#
+  fill-anime-movie-queue:
+    priority: 13
+    myanimelist:
+      user_id: "{? myanimelist.id ?}"
+      list: both
+      type: movies
+    accept_all: yes
+    set:
+      title: "{{myanimelist_name|re_replace('[-/:;.★](?=[a-zA-Z])', ' ')|re_replace('[:;](?![a-zA-Z])|[`´()]', '')|re_replace('  +', ' ')}}"
+    list_add:
+      - entry_list: myanimelist-movies
+
+
 ##### Download anime from manually downloaded torrents
 #
   download-anime-manual:
@@ -464,6 +491,29 @@ tasks:
         - nyaa:
             category: anime eng
             filter: all
+
+
+##### Discover and download anime movies
+#
+  download-anime-movies-discover:
+    priority: 20
+    template:
+      - anime-movies
+      - torrents
+      - transmission-anime
+      - pushbullet
+    discover:
+      release_estimations: ignore
+      interval: 15 minutes
+      what:
+        - entry_list: myanimelist-movies
+      from:
+        - nyaa:
+            category: anime eng
+            filter: all
+    list_match:
+      from:
+        - entry_list: myanimelist-movies
 
 
 ########## MOVIES ##########
