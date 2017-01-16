@@ -385,7 +385,7 @@ tasks:
 
 ##### Fill the movie queue with movies from trakt list
 #
-  fill-anime-movie-queue:
+  fill-anime-movies-queue:
     priority: 13
     myanimelist:
       user_id: "{? myanimelist.id ?}"
@@ -520,7 +520,7 @@ tasks:
 
 ##### Remove manually downloaded movies from the movie queue and trakt list
 #
-  clean-movie-queue:
+  clean-movies-queue:
     priority: 31
     template:
       - disable-seen-retry
@@ -541,7 +541,7 @@ tasks:
 
 ##### Fill the movie queue with movies from trakt list
 #
-  fill-movie-queue:
+  fill-movies-queue:
     priority: 32
     trakt_list:
       account: "{? trakt.account ?}"
