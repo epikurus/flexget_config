@@ -328,7 +328,9 @@ tasks:
       - transmission-series
       - pushbullet
     magnets: yes
-    convert_magnet: yes
+    convert_magnet:
+      timeout: 10 seconds
+      force: yes
     inputs:
       - rss:
           url: http://showrss.info/feeds/all.rss
