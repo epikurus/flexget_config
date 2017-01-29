@@ -19,6 +19,7 @@ templates:
 #
   series:
     thetvdb_lookup: yes
+    tvmaze_lookup: yes
     include: series.yml
     configure_series:
       from:
@@ -348,7 +349,7 @@ tasks:
       - transmission-series
       - pushbullet
     discover:
-      release_estimations: ignore
+      release_estimations: strict
       interval: 15 minutes
       what:
         - next_series_episodes:
