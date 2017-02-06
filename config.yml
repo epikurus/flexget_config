@@ -53,7 +53,6 @@ templates:
 ##### Anime movies config
 #
   anime-movies:
-    entry_list: myanimelist-movies
     quality: 720p+ !10bit !h265
     content_size:
       min: 700
@@ -186,14 +185,23 @@ templates:
       content_filename: "{{tvdb_series_name|default(series_name)|pathscrub}} - {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %} - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %} - [{{quality}}]{% endif %}"
       path: "/{? folder.root ?}{? folder.downseries ?}{{tvdb_series_name|default(series_name)|pathscrub}}/"
 
-##### Transmission anime config
+##### Transmission anime series config
 #
-  transmission-anime:
+  transmission-anime-series:
     transmission:
       <<: *transmission-settings
       main_file_only: yes
       content_filename: "{{series_name}} - ep{{series_id}} - [{{quality}}]"
       path: "/{? folder.root ?}{? folder.downanime ?}{{series_name|pathscrub}}/"
+
+##### Transmission anime movies config
+#
+  transmission-anime-movies:
+    transmission:
+      <<: *transmission-settings
+      main_file_only: yes
+      content_filename: "{{regexp}} - [{{quality}}]"
+      path: "/{? folder.root ?}{? folder.downanime ?}{{regexp}}/"
 
 ##### Transmission movies config
 #
@@ -412,7 +420,7 @@ tasks:
     set:
       title: "{{myanimelist_name|re_replace('[-/:;.★](?=[a-zA-Z])', ' ')|re_replace('[:;](?![a-zA-Z])|[`´()]', '')|re_replace('  +', ' ')}}"
     list_add:
-      - entry_list: myanimelist-movies
+      - regexp_list: myanimelist-movies
 
 
 ##### Download anime from manually downloaded torrents
@@ -422,7 +430,7 @@ tasks:
     template:
       - disable-seen-retry
       - series-guessit
-      - transmission-anime
+      - transmission-anime-series
       - pushbullet
     filesystem:
       path: "/{? folder.root ?}{? folder.downanime ?}"
@@ -441,7 +449,7 @@ tasks:
       - anime-series
       - anime-reject
       - torrents
-      - transmission-anime
+      - transmission-anime-series
       - pushbullet
     inputs:
       - rss:
@@ -458,7 +466,7 @@ tasks:
       - anime-series
       - anime-reject
       - torrents
-      - transmission-anime
+      - transmission-anime-series
       - pushbullet
     inputs:
       - rss:
@@ -474,7 +482,7 @@ tasks:
       - anime-series
       - anime-reject
       - torrents
-      - transmission-anime
+      - transmission-anime-series
       - pushbullet
     metainfo_series: yes
     discover:
@@ -499,7 +507,7 @@ tasks:
       - anime-series
       - anime-reject
       - torrents
-      - transmission-anime
+      - transmission-anime-series
       - pushbullet
     discover:
       release_estimations: ignore
@@ -522,20 +530,20 @@ tasks:
       - anime-movies
       - anime-reject
       - torrents
-      - transmission-anime
+      - transmission-anime-movies
       - pushbullet
     discover:
       release_estimations: ignore
       interval: 15 minutes
       what:
-        - entry_list: myanimelist-movies
+        - regexp_list: myanimelist-movies
       from:
         - nyaa:
             category: anime eng
             filter: all
     list_match:
       from:
-        - entry_list: myanimelist-movies
+        - regexp_list: myanimelist-movies
 
 
 ########## MOVIES ##########
