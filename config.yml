@@ -54,7 +54,10 @@ templates:
 #
   anime-movies:
     entry_list: myanimelist-movies
-    quality: 720p !10bit !h265
+    quality: 720p+ !10bit !h265
+    content_size:
+      min: 700
+      max: 10000
 
 ##### Movies config
 #
@@ -88,19 +91,30 @@ templates:
   reject:
     regexp:
       reject:
-        - (s|d)ub(s|bed|lado|titulado)?\b
+        - \b(s|d)ub(s|bed|lado|titulado)?\b
+        - \bhc\b
         - \bdual\b
         - \b3d\b
-        - \b(fr)(ench)?\b
-        - \b(ita)(lian)?\b
-        - \b(spa)(nish)?\b
-        - \b(ger)(man)?\b
+        - \bfre(nch)?\b
+        - \bita(lian)?\b
+        - \bspa(nish)?\b
+        - \bger(man)?\b
         - \bcastellano\b
         - \brus(sian)?\b
     content_filter:
       reject:
         - '*.rar'
         - '*.zip'
+
+##### Anime rejections
+#
+  anime-reject:
+    regexp:
+      reject:
+        - \bdub\b
+        - \bhard(subs|subbed)?\b
+        - \bpv\b
+        - \b60fps\b
 
 
 ##### ADVANCED SETTINGS #####
@@ -425,6 +439,7 @@ tasks:
     priority: 15
     template:
       - anime-series
+      - anime-reject
       - torrents
       - transmission-anime
       - pushbullet
@@ -441,6 +456,7 @@ tasks:
     delay: 2 hours
     template:
       - anime-series
+      - anime-reject
       - torrents
       - transmission-anime
       - pushbullet
@@ -456,6 +472,7 @@ tasks:
     priority: 18
     template:
       - anime-series
+      - anime-reject
       - torrents
       - transmission-anime
       - pushbullet
@@ -480,6 +497,7 @@ tasks:
     delay: 2 hours
     template:
       - anime-series
+      - anime-reject
       - torrents
       - transmission-anime
       - pushbullet
@@ -502,6 +520,7 @@ tasks:
     priority: 20
     template:
       - anime-movies
+      - anime-reject
       - torrents
       - transmission-anime
       - pushbullet
