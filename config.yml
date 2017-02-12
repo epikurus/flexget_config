@@ -3,7 +3,7 @@ schedules:
   - tasks: ['populate-*', 'clean-*', 'update-*']
     schedule:
       hour: 0
-  - tasks: ['fill-*', '*-rss', '*-magnets']
+  - tasks: ['fill-*', '*-rss']
     schedule:
       minute: 0,30
   - tasks: ['*-discover', '*-manual']
@@ -340,26 +340,6 @@ tasks:
       - rss: https://www.limetorrents.cc/rss/20/
 
 
-##### Download episodes from RSS magnets feeds, as a fallback from the previous task
-#
-  download-series-magnets:
-    priority: 6
-    template:
-      - series
-      - reject
-      - torrents
-      - transmission-series
-      - pushbullet
-    magnets: yes
-    convert_magnet:
-      timeout: 10 seconds
-      force: yes
-    inputs:
-      - rss:
-          url: http://showrss.info/feeds/all.rss
-          all_entries: yes
-
-
 ##### Discover and download older episodes and pilots from recently added series
 #
   download-series-discover:
@@ -370,6 +350,10 @@ tasks:
       - torrents
       - transmission-series
       - pushbullet
+    magnets: yes
+    convert_magnet:
+      timeout: 10 seconds
+      force: yes
     discover:
       release_estimations: strict
       interval: 15 minutes
@@ -620,6 +604,10 @@ tasks:
     exists_movie:
       - "/{? folder.root ?}{? folder.downmovies ?}"
       - "/{? folder.root ?}{? folder.movies ?}"
+    magnets: yes
+    convert_magnet:
+      timeout: 10 seconds
+      force: yes
     discover:
       release_estimations: loose
       interval: 15 minutes
@@ -655,6 +643,10 @@ tasks:
     exists_movie:
       - "/{? folder.root ?}{? folder.downmovies ?}"
       - "/{? folder.root ?}{? folder.movies ?}"
+    magnets: yes
+    convert_magnet:
+      timeout: 10 seconds
+      force: yes
     discover:
       release_estimations: loose
       interval: 15 minutes
