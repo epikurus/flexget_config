@@ -394,8 +394,13 @@ tasks:
 
 ##### Fill the movie queue with movies from trakt list
 #
-  fill-anime-movies-queue:
+  fill-anime-movies-list:
     priority: 13
+    template:
+      - disable-seen-retry
+    list_clear:
+      what:
+        - regexp_list: myanimelist-movies
     myanimelist:
       user_id: "{? myanimelist.id ?}"
       list: both
