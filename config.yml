@@ -170,9 +170,8 @@ templates:
     domain_delay:
       thepiratebay.se: 10 seconds
       thepiratebay.org: 10 seconds
-      nyaa.se: 3 seconds
-      extratorrent: 3 seconds
       limetorrents: 3 seconds
+      anidex.info: 3 seconds
 
 ##### Transmission series config
 #
@@ -336,7 +335,6 @@ tasks:
       - pushbullet
     inputs:
       - rss: https://eztv.ag/ezrss.xml
-      - rss: https://extratorrent.cc/rss.xml?cid=8&type=new
       - rss: https://www.limetorrents.cc/rss/20/
 
 
@@ -363,8 +361,6 @@ tasks:
       from:
         - piratebay:
             category: highres tv
-        - extratorrent:
-            category: tv
         - limetorrents:
             category: tv
 
@@ -442,24 +438,7 @@ tasks:
       - pushbullet
     inputs:
       - rss:
-          url: http://www.nyaa.se/?page=rss&cats=1_37&filter=2
-          all_entries: yes
-
-
-##### Download anime from RSS feed from all groups
-#
-  download-anime-series-all-rss:
-    priority: 16
-    delay: 2 hours
-    template:
-      - anime-series
-      - anime-reject
-      - torrents
-      - transmission-anime-series
-      - pushbullet
-    inputs:
-      - rss:
-          url: http://www.nyaa.se/?page=rss&cats=1_37
+          url: https://anidex.info/rss/?cat=1&lang_id=1
           all_entries: yes
 
 
@@ -482,33 +461,7 @@ tasks:
             from_start: yes
             backfill: yes
       from:
-        - nyaa:
-            category: anime eng
-            filter: trusted only
-
-
-##### Discover and download anime from all groups
-#
-  download-anime-series-all-discover:
-    priority: 19
-    delay: 2 hours
-    template:
-      - anime-series
-      - anime-reject
-      - torrents
-      - transmission-anime-series
-      - pushbullet
-    discover:
-      release_estimations: ignore
-      interval: 15 minutes
-      what:
-        - next_series_episodes:
-            from_start: yes
-            backfill: yes
-      from:
-        - nyaa:
-            category: anime eng
-            filter: all
+        - search_rss: https://anidex.info/rss/?cat=1&lang_id=1&q=\{{search_term}}
 
 
 ##### Discover and download anime movies
@@ -527,9 +480,7 @@ tasks:
       what:
         - regexp_list: myanimelist-movies
       from:
-        - nyaa:
-            category: anime eng
-            filter: all
+        - search_rss: https://anidex.info/rss/?cat=1&lang_id=1&q=\{{search_term}}
     list_match:
       from:
         - regexp_list: myanimelist-movies
@@ -621,8 +572,6 @@ tasks:
       from:
         - piratebay:
             category: highres movies
-        - extratorrent:
-            category: movies
         - limetorrents:
             category: movies
     list_match:
@@ -660,8 +609,6 @@ tasks:
       from:
         - piratebay:
             category: highres movies
-        - extratorrent:
-            category: movies
         - limetorrents:
             category: movies
     if:
