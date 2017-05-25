@@ -437,9 +437,8 @@ tasks:
       - transmission-anime-series
       - pushbullet
     inputs:
-      - rss:
-          url: https://anidex.info/rss/?cat=1&lang_id=1
-          all_entries: yes
+      - rss: https://nyaa.si/?page=rss&c=1_2
+      - rss: https://anidex.info/rss/?cat=1&lang_id=1
 
 
 ##### Discover and download anime
@@ -461,6 +460,7 @@ tasks:
             from_start: yes
             backfill: yes
       from:
+        - search_rss: https://nyaa.si/?page=rss&c=1_2&q=\{{search_term}}
         - search_rss: https://anidex.info/rss/?cat=1&lang_id=1&q=\{{search_term}}
 
 
@@ -480,6 +480,7 @@ tasks:
       what:
         - regexp_list: myanimelist-movies
       from:
+        - search_rss: https://nyaa.si/?page=rss&c=1_2&q=\{{search_term}}
         - search_rss: https://anidex.info/rss/?cat=1&lang_id=1&q=\{{search_term}}
     list_match:
       from:
