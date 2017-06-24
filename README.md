@@ -34,6 +34,8 @@ Depends:
 * flexget >= 2.9.1
 * transmission-daemon
 * transmissionrpc >= 0.11
+* libtorrent
+* subliminal >= 2.0
 * Linux
 
 
