@@ -837,6 +837,11 @@ tasks:
       type: shows
     if:
       - tvdb_status == 'Ended': accept
+    list_add:
+      - trakt_list:
+          account: "{? trakt.account ?}"
+          list: "{? trakt.ended ?}"
+          type: shows
     list_remove:
       - trakt_list:
           account: "{? trakt.account ?}"
