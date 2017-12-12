@@ -1,3 +1,8 @@
+bin/
+include/
+lib/
+pip-selfcheck.json
+plugins/__pycache__/
 secrets.yml
 config.yml.*
 *log*
