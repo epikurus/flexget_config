@@ -238,7 +238,7 @@ templates:
     metainfo_series: yes
     thetvdb_lookup: yes
 
-##### Guessit parsing for some series tasks and anime, not applied to all tasks because it causes issues with "name (year)" based series, like scandal
+##### Guessit parsing for some series tasks and anime, not applied to all tasks because it used to cause issues with some series
 #
   series-guessit:
     parsing:
@@ -633,6 +633,7 @@ tasks:
     template:
       - disable-seen-retry
       - series-metainfo
+      - series-guessit
     filesystem:
       path: "/{? folder.root ?}{? folder.downseries ?}"
       recursive: yes
