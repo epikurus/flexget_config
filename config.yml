@@ -3,7 +3,7 @@ schedules:
   - tasks: ['populate-*', 'clean-*', 'update-*']
     schedule:
       hour: 0
-  - tasks: ['fill-*', '*-rss']
+  - tasks: ['*-nextep','fill-*', '*-rss']
     schedule:
       minute: 0,30
   - tasks: ['*-discover', '*-manual']
@@ -134,6 +134,7 @@ templates:
         - already been downloaded
         - Task does not have any
         - Task doesn't have any
+        - is before begin value
       move:
         - left because it exceeds safety value
         - does not exists (anymore)
@@ -287,11 +288,43 @@ tasks:
       settings:
         tracking: no
 
+##### Fetches the next unwatched episode from the series watchlist and adds it to a custom entry list
+#
+  get-series-nextep:
+    priority: 2
+    template:
+      - disable-seen-retry
+      - series-metainfo
+    list_clear:
+      what:
+        - entry_list: trakt-series-begin
+    next_trakt_episodes:
+      account: "{? trakt.account ?}"
+      list: "{? trakt.series ?}"
+      context: watched
+      position: next
+    accept_all: yes
+    list_add:
+      - entry_list: trakt-series-begin
+
+##### Formats the output of the previous task to tvdb format and sets the begin episode for the series
+#
+  set-series-nextep:
+    priority: 3
+    template:
+      - disable-seen-retry
+      - series-metainfo
+    entry_list: trakt-series-begin
+    accept_all: yes
+    set:
+      series_name: "{{tvdb_series_name|escape|replace('&#39;', '')}}"
+    set_series_begin: yes
+
 
 ##### Fetch, format and output trakt series list to a custom entry list
 #
   fill-series-list:
-    priority: 2
+    priority: 4
     template:
       - disable-seen-retry
       - series-metainfo
@@ -312,7 +345,7 @@ tasks:
 ##### Download episodes from manually downloaded torrents
 #
   download-series-manual:
-    priority: 4
+    priority: 6
     template:
       - disable-seen-retry
       - series-metainfo
@@ -331,7 +364,7 @@ tasks:
 ##### Download episodes from RSS feeds
 #
   download-series-rss:
-    priority: 5
+    priority: 7
     template:
       - series
       - reject
