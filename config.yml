@@ -130,9 +130,10 @@ templates:
     log_filter:
       task:
         - marked seen
-        - because quality already downloaded
-        - because episode has already been downloaded
+        - already downloaded
+        - already been downloaded
         - Task does not have any
+        - Task doesn't have any
       move:
         - left because it exceeds safety value
         - does not exists (anymore)
@@ -156,6 +157,10 @@ templates:
         - ""
       utils.requests:
         - Waiting
+      manipulate:
+        - Field `title` is now
+      filesystem:
+        - Starting to scan
 
 ##### Common torrents config
 #
