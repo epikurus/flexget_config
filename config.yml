@@ -31,6 +31,7 @@ templates:
         quality: webrip+ 720p !10bit !h265
         propers: 16 hours
         specials: no
+        season_packs: yes
     content_size:
       min: 350
     content_filter:
@@ -376,10 +377,39 @@ tasks:
       - rss: https://www.limetorrents.cc/rss/20/
 
 
+##### Discover and download season packs
+#
+  download-seasons-discover:
+    priority: 8
+    template:
+      - series
+      - reject
+      - torrents
+      - transmission-series
+      - pushbullet
+    #thetvdb does not support season lookups yet
+    thetvdb_lookup: no
+    magnets: yes
+    convert_magnet:
+      timeout: 10 seconds
+      force: yes
+    discover:
+      release_estimations: strict
+      interval: 15 minutes
+      what:
+        - next_series_seasons:
+            from_start: yes
+      from:
+        - piratebay:
+            category: highres tv
+        - limetorrents:
+            category: tv
+
+
 ##### Discover and download older episodes and pilots from recently added series
 #
   download-series-discover:
-    priority: 8
+    priority: 9
     template:
       - series
       - reject
