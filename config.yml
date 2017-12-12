@@ -498,10 +498,26 @@ tasks:
         for_accepted: rm -f "{{location}}"
 
 
-##### Download anime from RSS feed
+##### Download anime from RSS feed from verified groups
 #
   download-anime-series-rss:
     priority: 15
+    template:
+      - anime-series
+      - anime-reject
+      - torrents
+      - transmission-anime-series
+      - pushbullet
+    inputs:
+      - rss: https://nyaa.si/?page=rss&c=1_2&f=2
+      - rss: https://anidex.info/rss/?cat=1&lang_id=1&a=1
+
+
+##### Download anime from RSS feed from all groups
+#
+  download-anime-series-all-rss:
+    priority: 16
+    delay: 2 days
     template:
       - anime-series
       - anime-reject
@@ -513,10 +529,34 @@ tasks:
       - rss: https://anidex.info/rss/?cat=1&lang_id=1
 
 
-##### Discover and download anime
+##### Discover and download anime from verified groups
 #
   download-anime-series-discover:
     priority: 18
+    template:
+      - anime-series
+      - anime-reject
+      - torrents
+      - transmission-anime-series
+      - pushbullet
+    metainfo_series: yes
+    discover:
+      release_estimations: ignore
+      interval: 15 minutes
+      what:
+        - next_series_episodes:
+            from_start: yes
+            backfill: yes
+      from:
+        - search_rss: https://nyaa.si/?page=rss&c=1_2&f=2&q=\{{search_term}}
+        - search_rss: https://anidex.info/rss/?cat=1&lang_id=1&a=1&q=\{{search_term}}
+
+
+##### Discover and download anime from all groups
+#
+  download-anime-series-all-discover:
+    priority: 19
+    delay: 2 days
     template:
       - anime-series
       - anime-reject
