@@ -3,10 +3,10 @@ schedules:
   - tasks: ['populate-*', 'clean-*', 'update-*']
     schedule:
       hour: 0
-  - tasks: ['*-nextep','fill-*', '*-rss']
+  - tasks: ['*-rss']
     schedule:
       minute: 0,30
-  - tasks: ['*-discover', '*-manual']
+  - tasks: ['*-nextep','fill-*','*-discover', '*-manual']
     schedule:
       hour: '*/2'
   - tasks: ['move-*', download-subtitles]
