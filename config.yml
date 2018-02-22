@@ -191,6 +191,14 @@ templates:
       content_filename: "{{tvdb_series_name|default(series_name)|pathscrub}} - {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %} - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %} - [{{quality}}]{% endif %}"
       path: "/{? folder.root ?}{? folder.downseries ?}{{tvdb_series_name|default(series_name)|pathscrub}}/"
 
+##### Transmission anime config
+#
+  transmission-anime:
+    transmission:
+      <<: *transmission-settings
+      main_file_only: yes
+      path: "/{? folder.root ?}{? folder.downanime ?}{{title}}/"
+
 ##### Transmission anime series config
 #
   transmission-anime-series:
@@ -206,7 +214,7 @@ templates:
     transmission:
       <<: *transmission-settings
       main_file_only: yes
-      content_filename: "{{regexp}} - [{{quality}}]"
+      content_filename: "{{regexp}} - ep1 - [{{quality}}]"
       path: "/{? folder.root ?}{? folder.downanime ?}{{regexp}}/"
 
 ##### Transmission movies config
@@ -486,8 +494,7 @@ tasks:
     priority: 14
     template:
       - disable-seen-retry
-      - series-guessit
-      - transmission-anime-series
+      - transmission-anime
       - pushbullet
     filesystem:
       path: "/{? folder.root ?}{? folder.downanime ?}"
@@ -510,7 +517,6 @@ tasks:
       - pushbullet
     inputs:
       - rss: https://nyaa.si/?page=rss&c=1_2&f=2
-      - rss: https://anidex.info/rss/?cat=1&lang_id=1&a=1
 
 
 ##### Download anime from RSS feed from all groups
@@ -549,7 +555,6 @@ tasks:
             backfill: yes
       from:
         - search_rss: https://nyaa.si/?page=rss&c=1_2&f=2&q=\{{search_term}}
-        - search_rss: https://anidex.info/rss/?cat=1&lang_id=1&a=1&q=\{{search_term}}
 
 
 ##### Discover and download anime from all groups
