@@ -468,13 +468,8 @@ tasks:
 
 ##### Fill the movie queue with movies from trakt list
 #
-  fill-anime-movies-list:
+  fill-anime-movies-queue:
     priority: 13
-    template:
-      - disable-seen-retry
-    list_clear:
-      what:
-        - regexp_list: myanimelist-movies
     domain_delay:
       myanimelist.net: 5 seconds
     myanimelist:
