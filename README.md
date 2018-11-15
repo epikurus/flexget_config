@@ -1,4 +1,4 @@
-##My [Flexget](https://github.com/Flexget/Flexget) config
+## My [Flexget](https://github.com/Flexget/Flexget) config
 
 This is not a comprehensive feature list, and many settings were tuned to personal preference. It is also under constant development.
 
@@ -31,7 +31,7 @@ This was built based on multiple configurations and snippets over the time, with
 Depends:
 --------
 
-* flexget >= 2.9.1
+* flexget >= 2.9.1 (Recommended 2.11.21 until [#2071](https://github.com/Flexget/Flexget/issues/2071) is fixed)
 * transmission-daemon
 * transmissionrpc >= 0.11
 * libtorrent
