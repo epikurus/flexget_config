@@ -7,7 +7,6 @@ secrets.yml
 config.yml.*
 *log*
 *sqlite*
-*lock*
 plugins/*.pyc
 received/
 temp/
@@ -17,3 +16,5 @@ converted/
 *test*
 trakt*
 anidb*
+crash_report*
+.*
