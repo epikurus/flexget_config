@@ -27,8 +27,8 @@ templates:
       settings:
         identified_by: ep
         timeframe: 16 hours
-        target: hdtv+ 720p !10bit !h265
-        quality: webrip+ 720p !10bit !h265
+        target: hdtv+ 1080p
+        quality: webrip+ 720p-1080p
         propers: 16 hours
         specials: no
         season_packs: yes
@@ -47,14 +47,20 @@ templates:
         entry_list: myanimelist-series
       settings:
         identified_by: sequence
-        quality: 720p !10bit !h265
+        timeframe: 4 hours
+        target: 1080p
+        quality: 720p-1080p
         special_ids:
           - OVA
+    content_filter:
+      require:
+        - '*.mkv'
+        - '*.mp4'
 
 ##### Anime movies config
 #
   anime-movies:
-    quality: 720p+ !10bit !h265
+    quality: 720p+
     content_size:
       min: 700
       max: 10000
@@ -64,7 +70,7 @@ templates:
   movies-1080p:
     tmdb_lookup: yes
     movie_list: trakt-movies
-    quality: 1080p webdl+ !10bit !h265
+    quality: 1080p webdl+
     content_size:
       min: 1000
       max: 6000
@@ -72,7 +78,7 @@ templates:
   movies-720p:
     tmdb_lookup: yes
     movie_list: trakt-movies
-    quality: 720p webdl+ !10bit !h265
+    quality: 720p webdl+
     content_size:
       min: 500
       max: 3000
@@ -788,6 +794,9 @@ tasks:
     accept_all: yes
     move:
       to: "/{? folder.root ?}{? folder.anime ?}{{series_name|default(title)|pathscrub}}/"
+      along:
+        extensions:
+          - srt
       clean_source: 50
     exec:
       allow_background: yes
