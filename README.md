@@ -31,7 +31,7 @@ This was built based on multiple configurations and snippets over the time, with
 Depends:
 --------
 
-* flexget >= 2.9.1 (Recommended 2.11.21 until [#2071](https://github.com/Flexget/Flexget/issues/2071) is fixed)
+* flexget >= 3.0.28
 * transmission-daemon
 * transmissionrpc >= 0.11
 * libtorrent

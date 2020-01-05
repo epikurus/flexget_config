@@ -868,10 +868,16 @@ tasks:
 #
   clean-transmission:
     priority: 47
-    disable: details
-    clean_transmission:
+    template:
+      - disable-seen-retry
+    from_transmission:
       <<: *transmission-settings
-      finished_for: 1 day
+      only_complete: yes
+    if:
+      - transmission_date_done < now - timedelta(days=1): accept
+    transmission:
+      <<: *transmission-settings
+      action: remove
 
 
 ########## UPDATES ##########

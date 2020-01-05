@@ -1,7 +1,6 @@
 from __future__ import unicode_literals, division, absolute_import
 from builtins import *  # pylint: disable=unused-import, redefined-builtin
 
-import logging
 import re
 
 from flexget import plugin
@@ -9,8 +8,6 @@ from flexget.event import event
 from flexget.utils.cached_input import cached
 from flexget.entry import Entry
 from flexget.utils.soup import get_soup
-
-log = logging.getLogger('myanimelist')
 
 
 class myanimelist(object):
@@ -58,7 +55,6 @@ class myanimelist(object):
             return len(ign_tags) > 0
 
         def get_anime(task, url):
-            log.verbose("Requesting %s" % url)
             page = task.requests.get(url)
             if page.status_code != 200:
                 raise plugin.PluginError("Unable to get MAL list. Either the list is private or does not exist")
@@ -93,4 +89,4 @@ class myanimelist(object):
 
 @event('plugin.register')
 def register_plugin():
-    plugin.register(myanimelist, 'myanimelist', api_ver=2, groups=['list'])
+    plugin.register(myanimelist, 'myanimelist', api_ver=2)
