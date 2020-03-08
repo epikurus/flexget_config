@@ -73,7 +73,7 @@ templates:
     quality: 1080p webdl+
     content_size:
       min: 1000
-      max: 6000
+      max: 20000
 
   movies-720p:
     tmdb_lookup: yes
@@ -81,7 +81,7 @@ templates:
     quality: 720p webdl+
     content_size:
       min: 500
-      max: 3000
+      max: 5000
 
 ##### Transmission config
 #
@@ -184,7 +184,6 @@ templates:
       thepiratebay.se: 10 seconds
       thepiratebay.org: 10 seconds
       limetorrents: 3 seconds
-      anidex.info: 3 seconds
 
 ##### Transmission series config
 #
@@ -533,7 +532,6 @@ tasks:
       - pushbullet
     inputs:
       - rss: https://nyaa.si/?page=rss&c=1_2
-      - rss: https://anidex.info/rss/?cat=1&lang_id=1
 
 
 ##### Discover and download anime from verified groups
@@ -579,7 +577,6 @@ tasks:
             backfill: yes
       from:
         - search_rss: https://nyaa.si/?page=rss&c=1_2&q=\{{search_term}}
-        - search_rss: https://anidex.info/rss/?cat=1&lang_id=1&q=\{{search_term}}
 
 
 ##### Discover and download anime movies
@@ -599,7 +596,6 @@ tasks:
         - regexp_list: myanimelist-movies
       from:
         - search_rss: https://nyaa.si/?page=rss&c=1_2&q=\{{search_term}}
-        - search_rss: https://anidex.info/rss/?cat=1&lang_id=1&q=\{{search_term}}
     list_match:
       from:
         - regexp_list: myanimelist-movies
@@ -872,7 +868,6 @@ tasks:
       - disable-seen-retry
     from_transmission:
       <<: *transmission-settings
-      only_complete: yes
     if:
       - transmission_date_done < now - timedelta(days=1): accept
     transmission:

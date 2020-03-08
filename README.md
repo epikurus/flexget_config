@@ -1,6 +1,6 @@
 ## My [Flexget](https://github.com/Flexget/Flexget) config
 
-This is not a comprehensive feature list, and many settings were tuned to personal preference. It is also under constant development.
+This is not a comprehensive feature list, and many settings were tuned to personal preference.
 
 It currently does the following (ideally by this order):
 * Populates the series database with a set interval (mainly to allow fresh starts of the series db)
@@ -20,8 +20,6 @@ It currently does the following (ideally by this order):
 * Cleans torrents from transmission that have have been finished for 1 day, to allow checking transmission's webui for errors and alike
 * Updates the trakt series list from the series in the library, meaning that manually downloaded series will be part of flexget's series search, with the exception of when the tv show has already ended (with an interval of 1 day, because it should not happen often)
 * Finally, it will look if all the series currently in the trakt series list are still running, or have been canceled/ended, and if so, remove them from that list (with a big interval to avoid false positives)
-
-It parses multiple RSS feeds for tv shows, searches thepiratebay for movies and missing tv shows, and nyaa for anime.
 
 It also has Pushbullet notifications for all downloads and ended/canceled series, and the log_filter plugin (by [tarzasai](https://github.com/tarzasai/.flexget)) to filter some log messages that are unnecessary.
 
