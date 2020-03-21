@@ -181,8 +181,7 @@ templates:
     # Can remove if you upgrade to python 2.7.9+ or install requests[security]
     #verify_ssl_certificates: no
     domain_delay:
-      thepiratebay.se: 10 seconds
-      thepiratebay.org: 10 seconds
+      nyaa: 3 seconds
       limetorrents: 3 seconds
 
 ##### Transmission series config
@@ -415,6 +414,7 @@ tasks:
       from:
         - piratebay:
             category: highres tv
+            url: https://pirateproxy.live
         - limetorrents:
             category: tv
 
@@ -442,6 +442,7 @@ tasks:
       from:
         - piratebay:
             category: highres tv
+            url: https://pirateproxy.live
         - limetorrents:
             category: tv
 
@@ -553,7 +554,9 @@ tasks:
             from_start: yes
             backfill: yes
       from:
-        - search_rss: https://nyaa.si/?page=rss&c=1_2&f=2&q=\{{search_term}}
+        - nyaa:
+            category: anime eng
+            filter: trusted only
 
 
 ##### Discover and download anime from all groups
@@ -576,7 +579,9 @@ tasks:
             from_start: yes
             backfill: yes
       from:
-        - search_rss: https://nyaa.si/?page=rss&c=1_2&q=\{{search_term}}
+        - nyaa:
+            category: anime eng
+            filter: all
 
 
 ##### Discover and download anime movies
@@ -595,7 +600,9 @@ tasks:
       what:
         - regexp_list: myanimelist-movies
       from:
-        - search_rss: https://nyaa.si/?page=rss&c=1_2&q=\{{search_term}}
+        - nyaa:
+            category: anime eng
+            filter: all
     list_match:
       from:
         - regexp_list: myanimelist-movies
@@ -687,6 +694,7 @@ tasks:
       from:
         - piratebay:
             category: highres movies
+            url: https://pirateproxy.live
         - limetorrents:
             category: movies
     list_match:
@@ -724,6 +732,7 @@ tasks:
       from:
         - piratebay:
             category: highres movies
+            url: https://pirateproxy.live
         - limetorrents:
             category: movies
     if:
@@ -869,7 +878,7 @@ tasks:
     from_transmission:
       <<: *transmission-settings
     if:
-      - transmission_date_done < now - timedelta(days=1): accept
+      - transmission_date_done > transmission_date_added and transmission_date_done < now - timedelta(days=1): accept
     transmission:
       <<: *transmission-settings
       action: remove
