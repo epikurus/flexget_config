@@ -360,8 +360,8 @@ tasks:
       - transmission-series
       - pushbullet
     inputs:
-      - rss: https://eztv.ag/ezrss.xml
-      - rss: https://www.limetorrents.cc/rss/20/
+      - rss: https://eztv.re/ezrss.xml
+      - rss: https://www.limetorrents.info/rss/20/
 
 
 ##### Discover and download season packs
@@ -389,7 +389,6 @@ tasks:
       from:
         - piratebay:
             category: highres tv
-            url: https://pirateproxy.live
         - limetorrents:
             category: tv
 
@@ -417,7 +416,6 @@ tasks:
       from:
         - piratebay:
             category: highres tv
-            url: https://pirateproxy.live
         - limetorrents:
             category: tv
 
@@ -669,7 +667,6 @@ tasks:
       from:
         - piratebay:
             category: highres movies
-            url: https://pirateproxy.live
         - limetorrents:
             category: movies
     list_match:
@@ -707,7 +704,6 @@ tasks:
       from:
         - piratebay:
             category: highres movies
-            url: https://pirateproxy.live
         - limetorrents:
             category: movies
     if:
