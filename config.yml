@@ -133,42 +133,17 @@ templates:
     free_space:
       path: "/{? folder.root ?}"
       space: 5000
-    # Requires log_filter plugin
     log_filter:
-      task:
-        - marked seen
-        - already downloaded
-        - already been downloaded
-        - Task does not have any
-        - Task doesn't have any
-        - is before begin value
-      move:
-        - left because it exceeds safety value
-        - does not exists (anymore)
-      urlrewriter:
-        - URL rewritten to
-      enzyme.mkv:
-        - Reading
-        - Processing
-      enzyme.parsers.ebml.core:
-        - ignored
-        - Maximum level
-      subliminal.video:
-        - Scanning video
-      parser_internal:
-        - appears to be an episode pack
-      content_size:
-        - rejecting
-      search_rss:
-        - Error
-      assume_quality:
-        - ""
-      utils.requests:
-        - Waiting
-      manipulate:
-        - Field `title` is now
-      filesystem:
-        - Starting to scan
+    - message: "is already marked seen in the task populate-series-db"
+    - message: "is before begin value"
+    - message: "because entity has already been downloaded"
+    - message: "because quality already downloaded"
+    - message: "appears to be an episode pack"
+      plugin: parser_internal
+    - message: "rejecting"
+      plugin: content_size
+    - message: "Field `title` is now "
+      plugin: manipulate
 
 ##### Common torrents config
 #

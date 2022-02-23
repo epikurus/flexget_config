@@ -29,9 +29,9 @@ This was built based on multiple configurations and snippets over the time, with
 Depends:
 --------
 
-* flexget >= 3.0.28
+* flexget >= 3.3.0
 * transmission-daemon
-* transmissionrpc >= 0.11
+* transmission-rpc >= 3.3.0
 * libtorrent
 * subliminal >= 2.0
 * Linux
