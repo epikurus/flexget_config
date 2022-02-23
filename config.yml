@@ -18,7 +18,6 @@ templates:
 ##### Series config
 #
   series:
-    thetvdb_lookup: yes
     tvmaze_lookup: yes
     include: series.yml
     configure_series:
@@ -167,8 +166,8 @@ templates:
       main_file_only: yes
       include_subs: yes
       rename_like_files: yes
-      content_filename: "{{tvdb_series_name|default(series_name)|pathscrub}} - {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %} - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %} - [{{quality}}]{% endif %}"
-      path: "/{? folder.root ?}{? folder.downseries ?}{{tvdb_series_name|default(series_name)|pathscrub}}/"
+      content_filename: "{{tvmaze_series_name|default(series_name)|pathscrub}} - {{series_id}}{% if tvmaze_episode_name|default(False) %} - {{tvmaze_episode_name|pathscrub}}{% endif %}{% if quality|default(False) %} - [{{quality}}]{% endif %}"
+      path: "/{? folder.root ?}{? folder.downseries ?}{{tvmaze_series_name|default(series_name)|pathscrub}}/"
 
 ##### Transmission anime config
 #
@@ -230,7 +229,7 @@ templates:
 #
   series-metainfo:
     metainfo_series: yes
-    thetvdb_lookup: yes
+    tvmaze_lookup: yes
 
 ##### Guessit parsing for some series tasks and anime, not applied to all tasks because it used to cause issues with some series
 #
@@ -295,7 +294,7 @@ tasks:
     list_add:
       - entry_list: trakt-series-begin
 
-##### Formats the output of the previous task to tvdb format and sets the begin episode for the series
+##### Formats the output of the previous task to tvmaze format and sets the begin episode for the series
 #
   set-series-nextep:
     priority: 3
@@ -305,7 +304,7 @@ tasks:
     entry_list: trakt-series-begin
     accept_all: yes
     set:
-      series_name: "{{tvdb_series_name|escape|replace('&#39;', '')}}"
+      series_name: "{{tvmaze_series_name|escape|replace('&#39;', '')}}"
     set_series_begin: yes
 
 
@@ -325,7 +324,7 @@ tasks:
       type: shows
     accept_all: yes
     set:
-      title: "{{tvdb_series_name|escape|replace('&#39;', '')}}"
+      title: "{{tvmaze_series_name|escape|replace('&#39;', '')}}"
     list_add:
       - entry_list: trakt-series
 
@@ -374,8 +373,6 @@ tasks:
       - torrents
       - transmission-series
       - pushbullet
-    #thetvdb does not support season lookups yet
-    thetvdb_lookup: no
     magnets: yes
     convert_magnet:
       timeout: 10 seconds
@@ -738,8 +735,8 @@ tasks:
       regexp: '.*\.(avi|mkv|mp4)$'
     accept_all: yes
     move:
-      to: "/{? folder.root ?}{? folder.series ?}{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}}/"
-      rename: "{{tvdb_series_name|escape|replace('&#39;', '')|pathscrub}} - {{tvdb_ep_id|default(series_id)}}{% if tvdb_ep_name|default(False) %} - {{tvdb_ep_name|pathscrub}}{% endif %}{% if quality|default(False) %} - [{{quality}}]{% endif %}"
+      to: "/{? folder.root ?}{? folder.series ?}{{tvmaze_series_name|escape|replace('&#39;', '')|pathscrub}}/"
+      rename: "{{tvmaze_series_name|escape|replace('&#39;', '')|pathscrub}} - {{series_id}}{% if tvmaze_episode_name|default(False) %} - {{tvmaze_episode_name|pathscrub}}{% endif %}{% if quality|default(False) %} - [{{quality}}]{% endif %}"
       along:
         extensions:
           - srt
@@ -877,7 +874,7 @@ tasks:
             format: ' S01E01'
     accept_all: yes
     if:
-      - tvdb_status == 'Ended': reject
+      - tvmaze_series_status == 'Ended': reject
     list_add:
       - trakt_list:
           account: "{? trakt.account ?}"
@@ -899,7 +896,7 @@ tasks:
       list: "{? trakt.series ?}"
       type: shows
     if:
-      - tvdb_status == 'Ended': accept
+      - tvmaze_series_status == 'Ended': accept
     list_add:
       - trakt_list:
           account: "{? trakt.account ?}"
