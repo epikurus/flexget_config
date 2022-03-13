@@ -69,15 +69,15 @@ templates:
   movies-1080p:
     tmdb_lookup: yes
     movie_list: trakt-movies
-    quality: 1080p webdl+
+    quality: 1080p webrip+
     content_size:
       min: 1000
-      max: 20000
+      max: 10000
 
   movies-720p:
     tmdb_lookup: yes
     movie_list: trakt-movies
-    quality: 720p webdl+
+    quality: 720p webrip+
     content_size:
       min: 500
       max: 5000
