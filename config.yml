@@ -849,6 +849,8 @@ tasks:
     from_transmission:
       <<: *transmission-settings
     if:
+      - transmission_date_done == None: fail
+      - not transmission_seed_ratio_ok and not transmission_idle_limit_ok: reject
       - transmission_date_done > transmission_date_added and transmission_date_done < now - timedelta(days=1): accept
     transmission:
       <<: *transmission-settings
