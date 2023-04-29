@@ -30,7 +30,7 @@ templates:
         quality: webrip+ 720p-1080p
         propers: 16 hours
         specials: no
-        season_packs: yes
+        season_packs: 5
     content_size:
       min: 350
     content_filter:
@@ -59,7 +59,7 @@ templates:
 ##### Anime movies config
 #
   anime-movies:
-    quality: 720p+
+    quality: 720p+ !workprint !cam !ts !tc !r5
     content_size:
       min: 700
       max: 10000
@@ -274,6 +274,7 @@ tasks:
           retrieve: dirs
       settings:
         tracking: no
+
 
 ##### Fetches the next unwatched episode from the series watchlist and adds it to a custom entry list
 #
@@ -748,7 +749,7 @@ tasks:
       - subtitle_list:
           list: subtitles
           path: "{{location}}"
-          remove_after: 7 days
+          remove_after: 2 days
     exec:
       on_exit:
         phase: find "/{? folder.root ?}{? folder.downseries ?}"* -type d -empty -delete
@@ -851,7 +852,7 @@ tasks:
     if:
       - transmission_date_done == None: fail
       - not transmission_seed_ratio_ok and not transmission_idle_limit_ok: reject
-      - transmission_date_done > transmission_date_added and transmission_date_done < now - timedelta(days=1): accept
+      - transmission_date_done < now.astimezone() - timedelta(days=1): accept
     transmission:
       <<: *transmission-settings
       action: remove
